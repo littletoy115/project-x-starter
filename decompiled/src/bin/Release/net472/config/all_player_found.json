@@ -1,0 +1,54 @@
+{
+  "grid": "dataGridView4",
+  "savedUtc": "2026-10-22T19:29:56.5842932Z",
+  "columns": [
+    {
+      "name": "dataGridViewTextBoxColumn49",
+      "header": "รายชื่อผู้เล่นที่พบ"
+    }
+  ],
+  "rows": [
+    {
+      "dataGridViewTextBoxColumn49": "GoodBoyyy"
+    },
+    {
+      "dataGridViewTextBoxColumn49": "GinJin420"
+    },
+    {
+      "dataGridViewTextBoxColumn49": "WindBreaker"
+    },
+    {
+      "dataGridViewTextBoxColumn49": "CherCher"
+    },
+    {
+      "dataGridViewTextBoxColumn49": "NAMIooTH"
+    },
+    {
+      "dataGridViewTextBoxColumn49": "K11OO"
+    },
+    {
+      "dataGridViewTextBoxColumn49": "RedE"
+    },
+    {
+      "dataGridViewTextBoxColumn49": "BlackC"
+    },
+    {
+      "dataGridViewTextBoxColumn49": "Rcha"
+    },
+    {
+      "dataGridViewTextBoxColumn49": "Icmax"
+    },
+    {
+      "dataGridViewTextBoxColumn49": "Hunt3rCha"
+    },
+    {
+      "dataGridViewTextBoxColumn49": "DexxJab"
+    },
+    {
+      "dataGridViewTextBoxColumn49": "ONJab"
+    },
+    {
+      "dataGridViewTextBoxColumn49": "Odize"
+    }
+  ]
+}

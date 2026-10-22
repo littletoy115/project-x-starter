@@ -1,0 +1,63 @@
+{
+  "grid": "dataGridView12",
+  "savedUtc": "2026-10-22T19:30:31.3666466Z",
+  "columns": [
+    {
+      "name": "dataGridViewTextBoxColumn59",
+      "header": "Monster ที่พบ"
+    }
+  ],
+  "rows": [
+    {
+      "dataGridViewTextBoxColumn59": "Little Hooligan"
+    },
+    {
+      "dataGridViewTextBoxColumn59": "Hooligan"
+    },
+    {
+      "dataGridViewTextBoxColumn59": "Chief Hooligan"
+    },
+    {
+      "dataGridViewTextBoxColumn59": "Little Bandit"
+    },
+    {
+      "dataGridViewTextBoxColumn59": "Bandit"
+    },
+    {
+      "dataGridViewTextBoxColumn59": "Gangster"
+    },
+    {
+      "dataGridViewTextBoxColumn59": "Street Junkie"
+    },
+    {
+      "dataGridViewTextBoxColumn59": "Slugger"
+    },
+    {
+      "dataGridViewTextBoxColumn59": "Slasher"
+    },
+    {
+      "dataGridViewTextBoxColumn59": "Jr. Bruiser"
+    },
+    {
+      "dataGridViewTextBoxColumn59": "Brawler"
+    },
+    {
+      "dataGridViewTextBoxColumn59": "Shocker"
+    },
+    {
+      "dataGridViewTextBoxColumn59": "Bruiser"
+    },
+    {
+      "dataGridViewTextBoxColumn59": "Onslaught"
+    },
+    {
+      "dataGridViewTextBoxColumn59": "Bandit Leader"
+    },
+    {
+      "dataGridViewTextBoxColumn59": "Fencing Student"
+    },
+    {
+      "dataGridViewTextBoxColumn59": "Master Fencer"
+    }
+  ]
+}

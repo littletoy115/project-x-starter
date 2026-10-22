@@ -1,0 +1,68 @@
+{
+  "format": 1,
+  "restore": {
+    "e:\\reverse-bot\\decompiled\\_backup\\src-before-strip-network\\Capybara-KlassX-strings.csproj": {}
+  },
+  "projects": {
+    "e:\\reverse-bot\\decompiled\\_backup\\src-before-strip-network\\Capybara-KlassX-strings.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "e:\\reverse-bot\\decompiled\\_backup\\src-before-strip-network\\Capybara-KlassX-strings.csproj",
+        "projectName": "Capybara-KlassX",
+        "projectPath": "e:\\reverse-bot\\decompiled\\_backup\\src-before-strip-network\\Capybara-KlassX-strings.csproj",
+        "packagesPath": "C:\\Users\\voras\\.nuget\\packages\\",
+        "outputPath": "e:\\reverse-bot\\decompiled\\_backup\\src-before-strip-network\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\voras\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net472"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net472": {
+            "targetAlias": "net472",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.300"
+      },
+      "frameworks": {
+        "net472": {
+          "targetAlias": "net472",
+          "dependencies": {
+            "Microsoft.NETFramework.ReferenceAssemblies": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[1.0.3, )",
+              "autoReferenced": true
+            },
+            "System.Resources.Extensions": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.301\\RuntimeIdentifierGraph.json"
+        }
+      },
+      "runtimes": {
+        "win-x64": {
+          "#import": []
+        }
+      }
+    }
+  }
+}

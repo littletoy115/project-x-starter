@@ -1,0 +1,33 @@
+{
+  "grid": "dataGridView2",
+  "savedUtc": "2026-10-22T19:44:35.0815702Z",
+  "columns": [
+    {
+      "name": "Column4",
+      "header": "รายการไอเท็ม"
+    }
+  ],
+  "rows": [
+    {
+      "Column4": "Bread"
+    },
+    {
+      "Column4": "Destiny Box"
+    },
+    {
+      "Column4": "Megaphone [30] (Event)"
+    },
+    {
+      "Column4": "Small SP Recovery Potion"
+    },
+    {
+      "Column4": "Small MP Recovery Potion"
+    },
+    {
+      "Column4": "Refine Pill"
+    },
+    {
+      "Column4": "Baill Powder"
+    }
+  ]
+}
