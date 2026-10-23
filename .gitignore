@@ -1,0 +1,5 @@
+# OneOCR (ไฟล์ของ Microsoft ~115 MB) — ต้นฉบับอยู่ src/OCR, build ก๊อปไป bin/.../OneOCR
+decompiled/src/OCR/
+decompiled/src/bin/Release/net472/OneOCR/
+# ผลจาก tools/package/make-dist.ps1
+dist/

@@ -37,7 +37,11 @@ backup ก่อนตัด: `_backup/src-before-strip-network/` (src ทั้
 | Discord webhook ของคนขาย (อัปโหลดภาพปริศนา + heroName + ผลตอบ) | ลบ `Class411`, `Class187`, `Class131.smethod_0`, `Class135.smethod_9`; `Class363` เหลือแค่เก็บ archive ในเครื่อง (`%LOCALAPPDATA%\Capybara_Bot\ChallengeCapture`) ให้ระบบตอบอัตโนมัติใช้ |
 
 - self-test ใน `Class198` ที่ทดสอบระบบพวกนี้ลบไปด้วย (รวม flag `--test-agent-license*`, `--test-update`, `--test-catalog-update`, `--check-catalog-update`, `--test-renew`, `--test-sell-vip`, `--test-challenge-capture`)
-- `checkBox_60`/`textBox_30` ("ใช้งาน Discord - แจ้งเตือน") ในแท็บ challenge เป็น UI ค้างที่ไม่ได้ต่อกับโค้ดอะไร — ไม่ได้แตะ
+- `checkBox_60`/`textBox_30` ("ใช้งาน Discord - แจ้งเตือน") ในแท็บ DisCord-Notify ต่อกับ `DiscordNotifier.cs` แล้ว (2026-10-23) — ส่ง captcha เข้า webhook **ของเราเอง** ให้คนตอบเอง
+  - เรียกจาก `Class363.NotifyDiscord` (ก่อนเก็บลง archive): ภาพ captcha ขยาย 3 เท่า + ชื่อตัวละคร + นับถอยหลัง `<t:…:R>` / พอเกมแจ้งผลก็ส่งตามอีกบรรทัด (ผ่าน / ผิด เหลือ N / ไม่ผ่าน / หมดเวลา)
+  - ค่าตั้งเก็บที่ `%LOCALAPPDATA%\Capybara_Bot\discord.json` (ใช้ร่วมทุกตัวละคร) ไม่ใช่ `<hero>_Setting.ini` เพราะไฟล์นั้นอยู่ใน git — `checkBox53`/`textBox36` จึงถูกกันออกจาก `Class11`
+  - ปุ่ม "ทดสอบ" ส่งข้อความทดสอบ + ภาพ captcha ล่าสุดใน archive · ส่งไม่ได้ดู `auto.log` (`[Discord] …`)
+  - checkbox แจ้งเตือนอื่น ๆ ในแท็บนี้ (GM, ตาย, กระซิบ ฯลฯ) ยังเป็น UI ค้างไม่ได้ต่อกับโค้ด
 - `js/runtime.renamed.js` ยังเป็นของเดิม (มีโค้ด license) — ไว้อ่านเทียบเท่านั้น
 
 ### `config\offsets.json`
@@ -87,7 +91,10 @@ dotnet build Capybara-KlassX-strings.csproj -c Release
 → src/bin/Release/net472/Capybara-KlassX.exe (+ Newtonsoft.Json.dll, System.*.dll ต้องอยู่โฟลเดอร์เดียวกัน)
 ```
 - ข้าง exe ต้องมี `config\klx.dll` + `config\klxsvc` (build copy จาก `E:\reverse-bot\config\` ให้อัตโนมัติ — ตั้งไว้ใน csproj)
-  และ `OneOCR\` (`oneocr.dll`, `oneocr.onemodel`, `onnxruntime.dll`) สำหรับตอบภาพกันบอท — **ยังไม่มีในเครื่อง** (Snipping Tool เครื่องนี้เก่าเกิน) ไม่บังคับตอนเปิดโปรแกรม
+  และ `OneOCR\` (`oneocr.dll`, `oneocr.onemodel`, `onnxruntime.dll`) สำหรับตอบภาพกันบอท — ต้นฉบับเก็บที่ `src\OCR\` (ไม่เข้า git) build copy ไปให้เอง · ใช้บน Win10 เครื่องนี้ได้ (ทดสอบ 2026-10-23) · ไม่บังคับตอนเปิดโปรแกรม · รายละเอียด + ทดสอบ: `ONEOCR.md`
+- แพ็กไปเครื่องอื่น: `powershell -ExecutionPolicy Bypass -File tools\package\make-dist.ps1` → `dist\Capybara-KlassX\` + zip (~150 MB)
+  build ลงโฟลเดอร์ใหม่ → ไม่ติดค่าตั้งส่วนตัว และรันได้แม้บอทเปิดอยู่ · native dll ไม่ต้องลง VC++ redist · ค่าตั้ง/Discord อยู่ที่ `%LOCALAPPDATA%\Capybara_Bot` ของแต่ละเครื่อง
+- เปิดหลายตัว: 1 exe ต่อ 1 จอ LDPlayer — จอที่ n ใช้ `emulator-(5554+2n)` / port `27042+n` แยกกันเอง (`Class444`) · ห้ามกด Kill-SV ตอนตัวอื่นรันอยู่ (`adb kill-server` ตัด adb ทุกตัว) · `auto.log` ใช้ไฟล์เดียวกัน (เขียนชนกันแล้วบรรทัดอาจหาย)
 - exe ต้องรันแบบ **Run as administrator** (app.manifest = requireAdministrator) — ถ้าแค่รัน self-test ให้ตั้ง `__COMPAT_LAYER=RunAsInvoker` ก่อนรันจะได้ไม่ต้อง elevate
 - ทดสอบ record HP: `powershell -ExecutionPolicy Bypass -File tools\hptest\run.ps1`
   (ใช้ writer จริงจาก `src/runtime.js` → parser จริงใน exe; ต้อง PASS ทั้ง 4)

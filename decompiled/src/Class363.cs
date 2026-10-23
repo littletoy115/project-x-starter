@@ -64,6 +64,8 @@ internal sealed class Class363 : IDisposable
 
 	private Class351 class351_0;
 
+	internal DiscordNotifier Discord { get; set; }
+
 	internal Class363(string string_0, Action<string> action_1 = null, Func<string> func_1 = null)
 	{
 		action_0 = action_1 ?? new Action<string>(Class364.class364_0.method_0);
@@ -166,6 +168,7 @@ internal sealed class Class363 : IDisposable
 	{
 		foreach (Class365 item in blockingCollection_0.GetConsumingEnumerable())
 		{
+			NotifyDiscord(item);
 			for (int i = 0; i < 3; i++)
 			{
 				try
@@ -205,6 +208,31 @@ internal sealed class Class363 : IDisposable
 				}
 				break;
 			}
+		}
+	}
+
+	// Before the archive step, so a captcha the archive rejects (e.g. a new image under the same id) is still posted.
+	private void NotifyDiscord(Class365 item)
+	{
+		DiscordNotifier discord = Discord;
+		if (discord == null)
+		{
+			return;
+		}
+		try
+		{
+			if (item.string_0 == "capture")
+			{
+				discord.NotifyChallenge(item.string_1, item.uint_0, item.int_1, item.int_2, item.byte_0, item.string_3);
+			}
+			else if (item.string_0 == "result")
+			{
+				discord.NotifyResult(item.string_1, item.uint_0, item.int_3, item.int_2);
+			}
+		}
+		catch (Exception ex)
+		{
+			action_0("[Discord] " + ex.Message);
 		}
 	}
 

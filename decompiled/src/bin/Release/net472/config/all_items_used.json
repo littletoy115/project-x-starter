@@ -1,6 +1,6 @@
 {
   "grid": "dataGridView2",
-  "savedUtc": "2026-10-22T19:44:35.0815702Z",
+  "savedUtc": "2026-10-23T04:24:24.8308304Z",
   "columns": [
     {
       "name": "Column4",
@@ -28,6 +28,51 @@
     },
     {
       "Column4": "Baill Powder"
+    },
+    {
+      "Column4": "Ternary Stick"
+    },
+    {
+      "Column4": "Wooden Necklace"
+    },
+    {
+      "Column4": "Fine Burr"
+    },
+    {
+      "Column4": "Spike Stick"
+    },
+    {
+      "Column4": "JianXi Bow"
+    },
+    {
+      "Column4": "Wooden Sword"
+    },
+    {
+      "Column4": "Protection Potion"
+    },
+    {
+      "Column4": "Luxury Protection Potion"
+    },
+    {
+      "Column4": "Lite Practice Bow"
+    },
+    {
+      "Column4": "Leather Gauntlets"
+    },
+    {
+      "Column4": "XinYue Dagger"
+    },
+    {
+      "Column4": "Spirit Talisman"
+    },
+    {
+      "Column4": "Upgraded Wooden Arrow"
+    },
+    {
+      "Column4": "Burr"
+    },
+    {
+      "Column4": "Saber"
     }
   ]
 }

@@ -3674,6 +3674,8 @@ public sealed class GForm0 : Form
 
 	private Class363 class363_0;
 
+	private DiscordNotifier discordNotifier_0;
+
 	private readonly object object_0 = new object();
 
 	private readonly HashSet<Task> hashSet_0 = new HashSet<Task>();
@@ -5466,9 +5468,12 @@ public sealed class GForm0 : Form
 		class190_0 = new Class190(textBox_6, button_11, comboBox_0, comboBox_27, button_84, button_83);
 		class190_0.action_1 = method_137;
 		class190_0.method_2();
+		discordNotifier_0 = new DiscordNotifier(method_2);
+		discordNotifier_0.Load();
 		try
 		{
 			class363_0 = new Class363(Class363.smethod_0(), method_2, method_138);
+			class363_0.Discord = discordNotifier_0;
 			Class114 @class = new Class114
 			{
 				bool_0 = Class131.smethod_1(),
@@ -5512,7 +5517,7 @@ public sealed class GForm0 : Form
 			Name = "challengeDisclosure",
 			Location = new Point(306, 5),
 			Size = new Size(320, 68),
-			Text = "ภาพย\u0e37นย\u0e31นต\u0e31วตน ผลการตรวจสอบ และช\u0e37\u0e48อต\u0e31วละครจะถ\u0e39กเก\u0e47บในเคร\u0e37\u0e48องเท\u0e48าน\u0e31\u0e49น ไม\u0e48ส\u0e48งออกไปไหน"
+			Text = "ภาพยืนยันตัวตน ผลการตรวจสอบ และชื่อตัวละครเก็บไว้ในเครื่อง — ถ้าติ๊ก \"ใช้งาน Discord - แจ้งเตือน\" ภาพ captcha + ชื่อตัวละครจะถูกส่งไปที่ webhook ที่ใส่ไว้ด้วย"
 		});
 		Class119 class2 = new Class119();
 		class2.synchronizationContext_0 = SynchronizationContext.Current;
@@ -5534,7 +5539,8 @@ public sealed class GForm0 : Form
 		button_2.Enabled = false;
 		button_1.Enabled = false;
 		class11_0 = new Class11("Setting.ini");
-		class11_0.method_3().UnionWith(new string[6] { "checkBox37", "checkBox2", "checkBox42", "comboBox1", "comboBox23", "textBox3" });
+		// checkBox53/textBox36 = Discord switch + webhook URL: kept in discord.json (DiscordNotifier), not in the per-hero ini
+		class11_0.method_3().UnionWith(new string[8] { "checkBox37", "checkBox2", "checkBox42", "comboBox1", "comboBox23", "textBox3", "checkBox53", "textBox36" });
 		for (int i = 1; i <= 6; i++)
 		{
 			string item = i.ToString(CultureInfo.InvariantCulture);
@@ -5546,6 +5552,7 @@ public sealed class GForm0 : Form
 		textBox_1.Leave += textBox_0_Leave;
 		textBox_0.Leave += textBox_0_Leave;
 		class11_0.method_7(this);
+		SetupDiscordNotify();
 		checkBox_35.CheckedChanged += checkBox_35_CheckedChanged;
 		checkBox_34.CheckedChanged += checkBox_34_CheckedChanged;
 		method_28();
@@ -15749,6 +15756,50 @@ public sealed class GForm0 : Form
 	private string method_138()
 	{
 		return Volatile.Read(ref string_0);
+	}
+
+	private void SetupDiscordNotify()
+	{
+		checkBox_60.Checked = discordNotifier_0.Enabled;
+		textBox_30.Text = discordNotifier_0.WebhookUrl;
+		textBox_30.Size = new Size(222, 20);
+		Button test = new Button
+		{
+			Name = "buttonDiscordTest",
+			Location = new Point(234, 22),
+			Size = new Size(66, 22),
+			Text = "ทดสอบ",
+			UseVisualStyleBackColor = true
+		};
+		tabPage_9.Controls.Add(test);
+		checkBox_60.CheckedChanged += delegate
+		{
+			discordNotifier_0.Update(checkBox_60.Checked, textBox_30.Text);
+		};
+		textBox_30.TextChanged += delegate
+		{
+			discordNotifier_0.Update(checkBox_60.Checked, textBox_30.Text);
+		};
+		test.Click += async delegate
+		{
+			test.Enabled = false;
+			try
+			{
+				string error = await discordNotifier_0.SendTestAsync(textBox_30.Text, method_138());
+				if (error == null)
+				{
+					MessageBox.Show(this, "ส่งแล้ว ไปดูในห้อง Discord ได้เลย" + (checkBox_60.Checked ? string.Empty : "\n\n(ยังไม่ได้ติ๊ก \"ใช้งาน Discord - แจ้งเตือน\" — ต้องติ๊กก่อน ตอนเจอ captcha ถึงจะส่ง)"), "Discord", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				}
+				else
+				{
+					MessageBox.Show(this, "ส่งไม่ได้: " + error, "Discord", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+				}
+			}
+			finally
+			{
+				test.Enabled = true;
+			}
+		};
 	}
 
 	private void method_139(string string_8, uint uint_0, string string_9, double double_0)

@@ -55,4 +55,10 @@
     <!-- ตาราง offset (เดิมได้จาก license server ตอน /login) → LocalOffsets.cs -->
     <None Include="..\..\config\offsets.json" Link="config\offsets.json" CopyToOutputDirectory="PreserveNewest" Visible="false" />
   </ItemGroup>
+  <ItemGroup>
+    <!-- OneOCR ตัวอ่าน captcha: เก็บไว้ที่ src\OCR (ไม่เข้า git) → build ก๊อปไปที่ OneOCR\ ข้าง exe (Class131.smethod_8 / Class136)
+         ก๊อปแค่ 3 ไฟล์นี้ — ไฟล์อื่นในโฟลเดอร์ OneOCR ทำให้ test-product-layout ไม่ผ่าน -->
+    <None Remove="OCR\**" />
+    <None Include="OCR\oneocr.dll;OCR\oneocr.onemodel;OCR\onnxruntime.dll" Condition="Exists('OCR\oneocr.dll')" Link="OneOCR\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" Visible="false" />
+  </ItemGroup>
 </Project>
