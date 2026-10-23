@@ -1,5 +1,10 @@
-# OneOCR (ไฟล์ของ Microsoft ~115 MB) — ต้นฉบับอยู่ src/OCR, build ก๊อปไป bin/.../OneOCR
-decompiled/src/OCR/
+# OneOCR: ต้นฉบับ decompiled/src/OCR อยู่ใน git (repo private) — build ก๊อปไป bin/.../OneOCR เอง
 decompiled/src/bin/Release/net472/OneOCR/
+# สำเนาที่ build ก๊อปมาจาก config/ (ต้นฉบับ config/klx.dll, config/klxsvc อยู่ใน git แล้ว)
+decompiled/src/bin/Release/net472/config/klx.dll
+decompiled/src/bin/Release/net472/config/klxsvc
 # ผลจาก tools/package/make-dist.ps1
 dist/
+# apk เกม — ไฟล์ละ > 100 MB, GitHub ไม่รับ และไม่ต้องใช้ตอน build/รันบอท
+game/apk/base.apk
+game/apk/split_UnityDataAssetPack.apk

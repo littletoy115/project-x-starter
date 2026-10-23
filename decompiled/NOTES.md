@@ -91,9 +91,12 @@ dotnet build Capybara-KlassX-strings.csproj -c Release
 → src/bin/Release/net472/Capybara-KlassX.exe (+ Newtonsoft.Json.dll, System.*.dll ต้องอยู่โฟลเดอร์เดียวกัน)
 ```
 - ข้าง exe ต้องมี `config\klx.dll` + `config\klxsvc` (build copy จาก `E:\reverse-bot\config\` ให้อัตโนมัติ — ตั้งไว้ใน csproj)
-  และ `OneOCR\` (`oneocr.dll`, `oneocr.onemodel`, `onnxruntime.dll`) สำหรับตอบภาพกันบอท — ต้นฉบับเก็บที่ `src\OCR\` (ไม่เข้า git) build copy ไปให้เอง · ใช้บน Win10 เครื่องนี้ได้ (ทดสอบ 2026-10-23) · ไม่บังคับตอนเปิดโปรแกรม · รายละเอียด + ทดสอบ: `ONEOCR.md`
+  และ `OneOCR\` (`oneocr.dll`, `oneocr.onemodel`, `onnxruntime.dll`) สำหรับตอบภาพกันบอท — ต้นฉบับเก็บที่ `src\OCR\` (อยู่ใน git บน branch build-exe) build copy ไปให้เอง · ใช้บน Win10 เครื่องนี้ได้ (ทดสอบ 2026-10-23) · ไม่บังคับตอนเปิดโปรแกรม · รายละเอียด + ทดสอบ: `ONEOCR.md`
 - แพ็กไปเครื่องอื่น: `powershell -ExecutionPolicy Bypass -File tools\package\make-dist.ps1` → `dist\Capybara-KlassX\` + zip (~150 MB)
   build ลงโฟลเดอร์ใหม่ → ไม่ติดค่าตั้งส่วนตัว และรันได้แม้บอทเปิดอยู่ · native dll ไม่ต้องลง VC++ redist · ค่าตั้ง/Discord อยู่ที่ `%LOCALAPPDATA%\Capybara_Bot` ของแต่ละเครื่อง
+- รันบนเครื่องอื่นจาก git (branch `build-exe`): ลง .NET SDK 8/9 → `git clone` → `git switch build-exe` → `cd decompiled\src` → `dotnet build -c Release` → รัน `bin\Release\net472\Capybara-KlassX.exe` แบบ admin
+  `config/klxsvc` (116 MB) อยู่ใน **Git LFS** (Git for Windows มีให้แล้ว — ถ้าได้ไฟล์ ~130 byte แปลว่า LFS ไม่ทำงาน: `git lfs install` แล้ว `git lfs pull`)
+  ไม่อยู่ใน git: `game/apk/base.apk`, `game/apk/split_UnityDataAssetPack.apk` (> 100 MB; ไม่ต้องใช้ตอน build/รัน)
 - เปิดหลายตัว: 1 exe ต่อ 1 จอ LDPlayer — จอที่ n ใช้ `emulator-(5554+2n)` / port `27042+n` แยกกันเอง (`Class444`) · ห้ามกด Kill-SV ตอนตัวอื่นรันอยู่ (`adb kill-server` ตัด adb ทุกตัว) · `auto.log` ใช้ไฟล์เดียวกัน (เขียนชนกันแล้วบรรทัดอาจหาย)
 - exe ต้องรันแบบ **Run as administrator** (app.manifest = requireAdministrator) — ถ้าแค่รัน self-test ให้ตั้ง `__COMPAT_LAYER=RunAsInvoker` ก่อนรันจะได้ไม่ต้อง elevate
 - ทดสอบ record HP: `powershell -ExecutionPolicy Bypass -File tools\hptest\run.ps1`

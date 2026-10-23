@@ -8,7 +8,7 @@
 
 ```
 E:\reverse-bot\decompiled\src\
-├── OCR\                      ← ต้นฉบับ (ไม่เข้า git)
+├── OCR\                      ← ต้นฉบับ (อยู่ใน git บน build-exe)
 │   ├── oneocr.dll
 │   ├── oneocr.onemodel
 │   └── onnxruntime.dll
@@ -74,5 +74,5 @@ test-ocr: text=24229 confidence=98.1234 latency=150ms candidate=24229
 
 ## Git
 
-`bin/` อยู่ใน git — ไฟล์ OneOCR ใหญ่และเป็นของ Microsoft **อย่า commit**:
-`.gitignore` ที่ root กัน `decompiled/src/OCR/` กับ `decompiled/src/bin/Release/net472/OneOCR/` ไว้แล้ว
+branch `build-exe`: ต้นฉบับ `decompiled/src/OCR/` (3 ไฟล์) **อยู่ใน git** เพื่อให้เครื่องอื่น clone แล้ว build ได้เลย — repo ต้องเป็น private (ไฟล์ของ Microsoft ห้ามเผยแพร่)
+ส่วนสำเนาใน `bin/Release/net472/OneOCR/` ยังอยู่ใน `.gitignore` (build สร้างให้เอง)

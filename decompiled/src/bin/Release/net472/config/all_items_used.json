@@ -1,6 +1,6 @@
 {
   "grid": "dataGridView2",
-  "savedUtc": "2026-10-23T04:24:24.8308304Z",
+  "savedUtc": "2026-10-23T06:13:11.1652499Z",
   "columns": [
     {
       "name": "Column4",
@@ -73,6 +73,63 @@
     },
     {
       "Column4": "Saber"
+    },
+    {
+      "Column4": "Edible Bread"
+    },
+    {
+      "Column4": "Novice Student Kit [Non-Trade]"
+    },
+    {
+      "Column4": "Training Rosary [1D]"
+    },
+    {
+      "Column4": "Bus Card [7D]"
+    },
+    {
+      "Column4": "Start Point Pass [7D]"
+    },
+    {
+      "Column4": "Back Point Pass [7D]"
+    },
+    {
+      "Column4": "Buddy Transmission Card [7D]"
+    },
+    {
+      "Column4": "Heavy Leather Gauntlets"
+    },
+    {
+      "Column4": "Ganil Powder"
+    },
+    {
+      "Column4": "Aruhagen Ring [Lv:120]"
+    },
+    {
+      "Column4": "Dynamic Shaman Pants [D]"
+    },
+    {
+      "Column4": "Iron Stick"
+    },
+    {
+      "Column4": "Lite Gauntlets"
+    },
+    {
+      "Column4": "Sodium"
+    },
+    {
+      "Column4": "Upgraded Script Arrow"
+    },
+    {
+      "Column4": "Lite Novice Sword"
+    },
+    {
+      "Column4": "Wood Stick"
+    },
+    {
+      "Column4": "Novice Bamboo Blade"
+    },
+    {
+      "Column4": "Aluminum Stick"
     }
   ]
 }
