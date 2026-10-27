@@ -3811,11 +3811,8 @@ public sealed class GForm0 : Form
 
 	private Label label_10;
 
-	private RadioButton radioButton_7;
 
-	private RadioButton radioButton_8;
 
-	private RadioButton radioButton_9;
 
 	private Label label_11;
 
@@ -4758,7 +4755,6 @@ public sealed class GForm0 : Form
 	private DataGridViewTextBoxColumn dataGridViewTextBoxColumn_69;
 
 
-	private Label label_118;
 
 
 	private TextBox textBox_50;
@@ -5742,7 +5738,33 @@ public sealed class GForm0 : Form
 			object value = dataGridView_28.Rows[e.RowIndex].Cells[0].Value;
 			if (value != null)
 			{
-				this.smethod_24(54, value.ToString());
+				// Toggle the name in the selection (names separated by ", ", matched by Class447.smethod_16):
+				// double-click adds a monster, double-click it again removes it. It used to replace the
+				// whole read-only box, so only one monster could be selected and it could never be cleared.
+				string text = value.ToString().Trim();
+				List<string> list = new List<string>();
+				bool flag = false;
+				string[] array = (textBox_50.Text ?? string.Empty).Split(',', '|');
+				for (int i = 0; i < array.Length; i++)
+				{
+					string text2 = array[i].Trim();
+					if (text2.Length != 0)
+					{
+						if (string.Equals(text2, text, StringComparison.OrdinalIgnoreCase))
+						{
+							flag = true;
+						}
+						else
+						{
+							list.Add(text2);
+						}
+					}
+				}
+				if (!flag && text.Length != 0)
+				{
+					list.Add(text);
+				}
+				this.smethod_24(54, string.Join(", ", list));
 			}
 		}
 	}
@@ -6530,7 +6552,6 @@ public sealed class GForm0 : Form
 		label_135 = new Label();
 		radioButton_32 = new RadioButton();
 		textBox_50 = new TextBox();
-		label_118 = new Label();
 		button_70 = new Button();
 		dataGridView_28 = new DataGridView();
 		dataGridViewTextBoxColumn_69 = new DataGridViewTextBoxColumn();
@@ -6605,9 +6626,6 @@ public sealed class GForm0 : Form
 		label_8 = new Label();
 		label_9 = new Label();
 		label_10 = new Label();
-		radioButton_7 = new RadioButton();
-		radioButton_8 = new RadioButton();
-		radioButton_9 = new RadioButton();
 		label_11 = new Label();
 		label_12 = new Label();
 		label_13 = new Label();
@@ -7400,7 +7418,6 @@ public sealed class GForm0 : Form
 		tabPage_1.Controls.Add(label_135);
 		tabPage_1.Controls.Add(radioButton_32);
 		tabPage_1.Controls.Add(textBox_50);
-		tabPage_1.Controls.Add(label_118);
 		tabPage_1.Controls.Add(button_70);
 		tabPage_1.Controls.Add(dataGridView_28);
 		tabPage_1.Controls.Add(checkBox_81);
@@ -7573,13 +7590,6 @@ public sealed class GForm0 : Form
 		textBox_50.ReadOnly = true;
 		textBox_50.Size = new Size(100, 20);
 		textBox_50.TabIndex = 52;
-		label_118.BackColor = Color.FromArgb(255, 255, 192);
-		label_118.Location = new Point(587, 161);
-		label_118.Name = "label106";
-		label_118.Size = new Size(42, 23);
-		label_118.TabIndex = 50;
-		label_118.Text = "Result";
-		label_118.TextAlign = ContentAlignment.MiddleCenter;
 		button_70.Location = new Point(542, 162);
 		button_70.Name = "button70";
 		button_70.Size = new Size(41, 23);
@@ -8151,31 +8161,6 @@ public sealed class GForm0 : Form
 		label_10.TabIndex = 12;
 		label_10.Text = "0";
 		label_10.TextAlign = ContentAlignment.MiddleCenter;
-		radioButton_7.AutoSize = true;
-		radioButton_7.Location = new Point(133, 128);
-		radioButton_7.Name = "radioButton52";
-		radioButton_7.Size = new Size(37, 17);
-		radioButton_7.TabIndex = 11;
-		radioButton_7.TabStop = true;
-		radioButton_7.Text = "F3";
-		radioButton_7.UseVisualStyleBackColor = true;
-		radioButton_8.AutoSize = true;
-		radioButton_8.Location = new Point(90, 128);
-		radioButton_8.Name = "radioButton51";
-		radioButton_8.Size = new Size(37, 17);
-		radioButton_8.TabIndex = 11;
-		radioButton_8.TabStop = true;
-		radioButton_8.Text = "F2";
-		radioButton_8.UseVisualStyleBackColor = true;
-		radioButton_9.AutoSize = true;
-		radioButton_9.Checked = true;
-		radioButton_9.Location = new Point(53, 128);
-		radioButton_9.Name = "radioButton50";
-		radioButton_9.Size = new Size(37, 17);
-		radioButton_9.TabIndex = 11;
-		radioButton_9.TabStop = true;
-		radioButton_9.Text = "F1";
-		radioButton_9.UseVisualStyleBackColor = true;
 		label_11.AutoSize = true;
 		label_11.Location = new Point(290, 108);
 		label_11.Name = "label9";
@@ -8299,9 +8284,6 @@ public sealed class GForm0 : Form
 		tabPage_3.Controls.Add(label_8);
 		tabPage_3.Controls.Add(label_9);
 		tabPage_3.Controls.Add(label_10);
-		tabPage_3.Controls.Add(radioButton_7);
-		tabPage_3.Controls.Add(radioButton_8);
-		tabPage_3.Controls.Add(radioButton_9);
 		tabPage_3.Controls.Add(label_11);
 		tabPage_3.Controls.Add(label_12);
 		tabPage_3.Controls.Add(label_13);
