@@ -1168,16 +1168,12 @@ internal static class Class360
 			smethod_34(gform0_0, class403_0, "no-box option");
 			return false;
 		}
-		// LuckyBox (Lock): a ticked type is never picked up ...
-		if (flag2 && (int_2 & smethod_0(class403_0.method_5())) != 0)
-		{
-			smethod_34(gform0_0, class403_0, "box type " + smethod_35(class403_0.method_5()) + " is locked");
-			return false;
-		}
-		// ... and while the character has a ticked effect running, no box is picked up so it is not replaced.
+		// LuckyBox (Lock): the ticked types are the effects we want. Boxes give a random effect, so keep picking
+		// up every box until the character runs a ticked effect, then stop so it is not replaced; when it ends,
+		// picking up starts again. (The ground box type does not say what effect opening it gives.)
 		if (flag2 && byte_0 != 0 && (int_2 & smethod_0(byte_0)) != 0)
 		{
-			smethod_34(gform0_0, class403_0, "active effect " + smethod_35(byte_0) + " is locked");
+			smethod_34(gform0_0, class403_0, "wanted effect " + smethod_35(byte_0) + " is running");
 			return false;
 		}
 		if (flag2)
@@ -1312,10 +1308,6 @@ internal static class Class360
 			return false;
 		}
 		if (bool_6 && flag2)
-		{
-			return false;
-		}
-		if (flag2 && (int_2 & smethod_0(class361_1.byte_2)) != 0)
 		{
 			return false;
 		}
@@ -1777,10 +1769,6 @@ internal static class Class360
 			return false;
 		}
 		if (bool_6 && flag2)
-		{
-			return false;
-		}
-		if (flag2 && (int_2 & smethod_0(class403_0.method_5())) != 0)
 		{
 			return false;
 		}
