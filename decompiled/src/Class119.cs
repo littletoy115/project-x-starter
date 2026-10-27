@@ -4004,9 +4004,21 @@ internal sealed class Class119 : IDisposable
 		return null;
 	}
 
+	// Snapshot of the three name maps handed to every census. Rebuilt only when a name was added or
+	// changed: copying all maps on each census (several per second, maps only grow) made garbage that
+	// grew with session length.
+	private Class95 class95_names;
+
+	private bool bool_namesDirty = true;
+
 	private Class95 method_202()
 	{
-		return new Class95(new Dictionary<string, string>(dictionary_0, StringComparer.Ordinal), new Dictionary<string, string>(dictionary_1, StringComparer.Ordinal), new Dictionary<string, string>(dictionary_2, StringComparer.Ordinal));
+		if (bool_namesDirty || class95_names == null)
+		{
+			class95_names = new Class95(new Dictionary<string, string>(dictionary_0, StringComparer.Ordinal), new Dictionary<string, string>(dictionary_1, StringComparer.Ordinal), new Dictionary<string, string>(dictionary_2, StringComparer.Ordinal));
+			bool_namesDirty = false;
+		}
+		return class95_names;
 	}
 
 	internal static IReadOnlyList<GStruct3> smethod_30(JObject jobject_0)
@@ -4819,24 +4831,35 @@ internal sealed class Class119 : IDisposable
 
 	private void method_203(JObject jobject_0)
 	{
-		smethod_56(jobject_0["mnames"] as JObject, dictionary_0);
-		smethod_56(jobject_0["inames"] as JObject, dictionary_1);
-		smethod_56(jobject_0["pnames"] as JObject, dictionary_2);
+		bool flag = smethod_56(jobject_0["mnames"] as JObject, dictionary_0);
+		flag |= smethod_56(jobject_0["inames"] as JObject, dictionary_1);
+		flag |= smethod_56(jobject_0["pnames"] as JObject, dictionary_2);
+		if (flag)
+		{
+			bool_namesDirty = true;
+		}
 	}
 
-	private static void smethod_56(JObject jobject_0, Dictionary<string, string> dictionary_3)
+	private static bool smethod_56(JObject jobject_0, Dictionary<string, string> dictionary_3)
 	{
 		if (jobject_0 == null)
 		{
-			return;
+			return false;
 		}
+		bool result = false;
 		foreach (KeyValuePair<string, JToken> item in jobject_0)
 		{
 			if (!string.IsNullOrEmpty(item.Key))
 			{
-				dictionary_3[item.Key] = (string?)item.Value;
+				string text = (string?)item.Value;
+				if (!dictionary_3.TryGetValue(item.Key, out var value) || value != text)
+				{
+					dictionary_3[item.Key] = text;
+					result = true;
+				}
 			}
 		}
+		return result;
 	}
 
 	private static List<Class403> smethod_57(IntPtr intptr_1, int int_17)

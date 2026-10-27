@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -674,9 +675,28 @@ internal static class Class366
 		return smethod_31<DataGridView>(gform0_0, string_0, bool_0: true);
 	}
 
+	// Name -> control per form. The bot reads dozens of settings every loop tick, and each
+	// Controls.Find(searchAllChildren) walked the whole form (well over a thousand controls).
+	private static readonly ConditionalWeakTable<GForm0, ConcurrentDictionary<string, Control>> conditionalWeakTable_0 = new ConditionalWeakTable<GForm0, ConcurrentDictionary<string, Control>>();
+
+	private static Control smethod_35(GForm0 gform0_0, string string_0)
+	{
+		ConcurrentDictionary<string, Control> orCreateValue = conditionalWeakTable_0.GetOrCreateValue(gform0_0);
+		if (orCreateValue.TryGetValue(string_0, out var value) && !value.IsDisposed && value.Name == string_0)
+		{
+			return value;
+		}
+		Control control = Class80.smethod_0(gform0_0.Controls.Find(string_0, searchAllChildren: true));
+		if (control != null)
+		{
+			orCreateValue[string_0] = control;
+		}
+		return control;
+	}
+
 	private static T smethod_31<T>(GForm0 gform0_0, string string_0, bool bool_0) where T : Control
 	{
-		T obj = Class80.smethod_0(gform0_0.Controls.Find(string_0, searchAllChildren: true)) as T;
+		T obj = smethod_35(gform0_0, string_0) as T;
 		if (obj == null && bool_0)
 		{
 			smethod_32(string_0);
