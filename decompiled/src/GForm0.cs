@@ -3768,7 +3768,6 @@ public sealed class GForm0 : Form
 
 	private Label label_1;
 
-	private Button button_0;
 
 	private TabPage tabPage_1;
 
@@ -4132,9 +4131,7 @@ public sealed class GForm0 : Form
 
 	private Label label_25;
 
-	private CheckBox checkBox_37;
 
-	private TextBox textBox_8;
 
 	private Label label_26;
 
@@ -4150,7 +4147,6 @@ public sealed class GForm0 : Form
 
 	private Label label_30;
 
-	private RadioButton radioButton_13;
 
 	private CheckBox checkBox_38;
 
@@ -4754,7 +4750,6 @@ public sealed class GForm0 : Form
 
 	private Label label_117;
 
-	private TextBox textBox_49;
 
 	private Button button_70;
 
@@ -4762,11 +4757,9 @@ public sealed class GForm0 : Form
 
 	private DataGridViewTextBoxColumn dataGridViewTextBoxColumn_69;
 
-	private Button button_71;
 
 	private Label label_118;
 
-	private Button button_72;
 
 	private TextBox textBox_50;
 
@@ -4916,7 +4909,6 @@ public sealed class GForm0 : Form
 
 	private Button button_82;
 
-	private CheckBox checkBox_99;
 
 	private CheckBox checkBox_100;
 
@@ -5996,9 +5988,6 @@ public sealed class GForm0 : Form
 		}
 	}
 
-	private void button_0_Click(object sender, EventArgs e)
-	{
-	}
 
 	private void button_6_Click(object sender, EventArgs e)
 	{
@@ -6216,13 +6205,7 @@ public sealed class GForm0 : Form
 		}
 	}
 
-	private void button_71_Click(object sender, EventArgs e)
-	{
-	}
 
-	private void button_72_Click(object sender, EventArgs e)
-	{
-	}
 
 	private void button_75_Click(object sender, EventArgs e)
 	{
@@ -6433,9 +6416,6 @@ public sealed class GForm0 : Form
 	{
 	}
 
-	private void textBox_49_TextChanged(object sender, EventArgs e)
-	{
-	}
 
 	private void tabPage_3_Click(object sender, EventArgs e)
 	{
@@ -6531,7 +6511,6 @@ public sealed class GForm0 : Form
 		checkBox_7 = new CheckBox();
 		label_0 = new Label();
 		label_1 = new Label();
-		button_0 = new Button();
 		tabPage_1 = new TabPage();
 		panel_13 = new Panel();
 		radioButton_34 = new RadioButton();
@@ -6543,7 +6522,6 @@ public sealed class GForm0 : Form
 		checkBox_103 = new CheckBox();
 		checkBox_104 = new CheckBox();
 		textBox_63 = new TextBox();
-		checkBox_99 = new CheckBox();
 		checkBox_95 = new CheckBox();
 		numericUpDown_0 = new NumericUpDown();
 		label_136 = new Label();
@@ -6552,13 +6530,10 @@ public sealed class GForm0 : Form
 		label_135 = new Label();
 		radioButton_32 = new RadioButton();
 		textBox_50 = new TextBox();
-		button_72 = new Button();
 		label_118 = new Label();
-		button_71 = new Button();
 		button_70 = new Button();
 		dataGridView_28 = new DataGridView();
 		dataGridViewTextBoxColumn_69 = new DataGridViewTextBoxColumn();
-		textBox_49 = new TextBox();
 		checkBox_81 = new CheckBox();
 		checkBox_82 = new CheckBox();
 		label_92 = new Label();
@@ -6578,15 +6553,12 @@ public sealed class GForm0 : Form
 		checkBox_47 = new CheckBox();
 		button_45 = new Button();
 		label_2 = new Label();
-		radioButton_13 = new RadioButton();
-		checkBox_37 = new CheckBox();
 		button_13 = new Button();
 		button_14 = new Button();
 		checkBox_32 = new CheckBox();
 		dataGridView_0 = new DataGridView();
 		dataGridViewTextBoxColumn_67 = new DataGridViewTextBoxColumn();
 		dataGridViewTextBoxColumn_68 = new DataGridViewTextBoxColumn();
-		textBox_8 = new TextBox();
 		button_3 = new Button();
 		button_4 = new Button();
 		trackBar_0 = new TrackBar();
@@ -7411,13 +7383,6 @@ public sealed class GForm0 : Form
 		label_1.Size = new Size(114, 13);
 		label_1.TabIndex = 0;
 		label_1.Text = "# LuckyBox (Lock)";
-		button_0.Location = new Point(259, 10);
-		button_0.Name = "button10";
-		button_0.Size = new Size(58, 23);
-		button_0.TabIndex = 16;
-		button_0.Text = "Get";
-		button_0.UseVisualStyleBackColor = true;
-		button_0.Click += button_0_Click;
 		tabPage_1.BorderStyle = BorderStyle.FixedSingle;
 		tabPage_1.Controls.Add(panel_13);
 		tabPage_1.Controls.Add(button_87);
@@ -7427,7 +7392,6 @@ public sealed class GForm0 : Form
 		tabPage_1.Controls.Add(checkBox_103);
 		tabPage_1.Controls.Add(checkBox_104);
 		tabPage_1.Controls.Add(textBox_63);
-		tabPage_1.Controls.Add(checkBox_99);
 		tabPage_1.Controls.Add(checkBox_95);
 		tabPage_1.Controls.Add(numericUpDown_0);
 		tabPage_1.Controls.Add(label_136);
@@ -7436,12 +7400,9 @@ public sealed class GForm0 : Form
 		tabPage_1.Controls.Add(label_135);
 		tabPage_1.Controls.Add(radioButton_32);
 		tabPage_1.Controls.Add(textBox_50);
-		tabPage_1.Controls.Add(button_72);
 		tabPage_1.Controls.Add(label_118);
-		tabPage_1.Controls.Add(button_71);
 		tabPage_1.Controls.Add(button_70);
 		tabPage_1.Controls.Add(dataGridView_28);
-		tabPage_1.Controls.Add(textBox_49);
 		tabPage_1.Controls.Add(checkBox_81);
 		tabPage_1.Controls.Add(checkBox_82);
 		tabPage_1.Controls.Add(label_92);
@@ -7461,17 +7422,13 @@ public sealed class GForm0 : Form
 		tabPage_1.Controls.Add(checkBox_47);
 		tabPage_1.Controls.Add(button_45);
 		tabPage_1.Controls.Add(label_2);
-		tabPage_1.Controls.Add(radioButton_13);
-		tabPage_1.Controls.Add(checkBox_37);
 		tabPage_1.Controls.Add(button_13);
 		tabPage_1.Controls.Add(button_14);
 		tabPage_1.Controls.Add(checkBox_32);
 		tabPage_1.Controls.Add(dataGridView_0);
-		tabPage_1.Controls.Add(textBox_8);
 		tabPage_1.Controls.Add(button_3);
 		tabPage_1.Controls.Add(button_4);
 		tabPage_1.Controls.Add(trackBar_0);
-		tabPage_1.Controls.Add(button_0);
 		tabPage_1.Controls.Add(label_20);
 		tabPage_1.Controls.Add(label_3);
 		tabPage_1.Controls.Add(label_4);
@@ -7558,13 +7515,6 @@ public sealed class GForm0 : Form
 		textBox_63.TabIndex = 82;
 		textBox_63.Text = "5";
 		textBox_63.TextAlign = HorizontalAlignment.Center;
-		checkBox_99.AutoSize = true;
-		checkBox_99.Location = new Point(189, 6);
-		checkBox_99.Name = "checkBox95";
-		checkBox_99.Size = new Size(70, 17);
-		checkBox_99.TabIndex = 78;
-		checkBox_99.Text = "กล\u0e48องบอท";
-		checkBox_99.UseVisualStyleBackColor = true;
 		checkBox_95.AutoSize = true;
 		checkBox_95.Location = new Point(208, 68);
 		checkBox_95.Name = "checkBox97";
@@ -7623,13 +7573,6 @@ public sealed class GForm0 : Form
 		textBox_50.ReadOnly = true;
 		textBox_50.Size = new Size(100, 20);
 		textBox_50.TabIndex = 52;
-		button_72.Location = new Point(588, 186);
-		button_72.Name = "button72";
-		button_72.Size = new Size(41, 23);
-		button_72.TabIndex = 51;
-		button_72.Text = "เพ\u0e34\u0e48ม";
-		button_72.UseVisualStyleBackColor = true;
-		button_72.Click += button_72_Click;
 		label_118.BackColor = Color.FromArgb(255, 255, 192);
 		label_118.Location = new Point(587, 161);
 		label_118.Name = "label106";
@@ -7637,13 +7580,6 @@ public sealed class GForm0 : Form
 		label_118.TabIndex = 50;
 		label_118.Text = "Result";
 		label_118.TextAlign = ContentAlignment.MiddleCenter;
-		button_71.Location = new Point(542, 186);
-		button_71.Name = "button71";
-		button_71.Size = new Size(44, 23);
-		button_71.TabIndex = 49;
-		button_71.Text = "ถ\u0e31ดไป";
-		button_71.UseVisualStyleBackColor = true;
-		button_71.Click += button_71_Click;
 		button_70.Location = new Point(542, 162);
 		button_70.Name = "button70";
 		button_70.Size = new Size(41, 23);
@@ -7691,11 +7627,6 @@ public sealed class GForm0 : Form
 		dataGridViewTextBoxColumn_69.HeaderText = "Monster ท\u0e35\u0e48พบ";
 		dataGridViewTextBoxColumn_69.Name = "dataGridViewTextBoxColumn59";
 		dataGridViewTextBoxColumn_69.ReadOnly = true;
-		textBox_49.Location = new Point(469, 187);
-		textBox_49.Name = "textBox53";
-		textBox_49.Size = new Size(76, 20);
-		textBox_49.TabIndex = 46;
-		textBox_49.TextChanged += textBox_49_TextChanged;
 		checkBox_81.AutoSize = true;
 		checkBox_81.Location = new Point(324, 198);
 		checkBox_81.Name = "checkBox82";
@@ -7823,21 +7754,6 @@ public sealed class GForm0 : Form
 		label_2.TabIndex = 14;
 		label_2.Text = "Current Position";
 		label_2.TextAlign = ContentAlignment.MiddleCenter;
-		radioButton_13.AutoSize = true;
-		radioButton_13.Location = new Point(212, 24);
-		radioButton_13.Name = "radioButton8";
-		radioButton_13.Size = new Size(47, 17);
-		radioButton_13.TabIndex = 28;
-		radioButton_13.TabStop = true;
-		radioButton_13.Text = "Heal";
-		radioButton_13.UseVisualStyleBackColor = true;
-		checkBox_37.AutoSize = true;
-		checkBox_37.Location = new Point(324, 9);
-		checkBox_37.Name = "checkBox39";
-		checkBox_37.Size = new Size(195, 17);
-		checkBox_37.TabIndex = 27;
-		checkBox_37.Text = "โหมดลากจะไม\u0e48สนใจหาก Monster  < ";
-		checkBox_37.UseVisualStyleBackColor = true;
 		button_13.Location = new Point(5, 341);
 		button_13.Name = "button7";
 		button_13.Size = new Size(75, 23);
@@ -7881,12 +7797,6 @@ public sealed class GForm0 : Form
 		dataGridViewTextBoxColumn_68.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
 		dataGridViewTextBoxColumn_68.HeaderText = "Y";
 		dataGridViewTextBoxColumn_68.Name = "Column2";
-		textBox_8.Location = new Point(525, 10);
-		textBox_8.Name = "textBox7";
-		textBox_8.Size = new Size(58, 20);
-		textBox_8.TabIndex = 21;
-		textBox_8.Text = "3";
-		textBox_8.TextAlign = HorizontalAlignment.Center;
 		button_3.Location = new Point(243, 313);
 		button_3.Name = "button4";
 		button_3.Size = new Size(75, 23);
