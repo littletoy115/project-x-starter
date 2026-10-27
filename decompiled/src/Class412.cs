@@ -569,6 +569,10 @@ internal static class Class412
 
 	private static uint uint_0;
 
+	// Last monster we told the game to hit (normal attack, target or skill). uint_0 is cleared on every
+	// skill cast and by smethod_14, so it cannot say what the character is still chasing.
+	private static uint uint_engaged;
+
 	private static DateTime dateTime_0;
 
 	private static bool bool_0;
@@ -740,6 +744,7 @@ internal static class Class412
 			{
 				class394_0.method_1(@class.uint_0, DateTime.UtcNow);
 				uint_0 = 0u;
+				uint_engaged = @class.uint_0;
 				return true;
 			}
 			if (await gform0_0.smethod_6(69))
@@ -759,6 +764,7 @@ internal static class Class412
 					}
 					class5.method_128(uint_2);
 					uint_0 = uint_2;
+					uint_engaged = uint_2;
 				}
 				return true;
 			}
@@ -799,6 +805,7 @@ internal static class Class412
 				_ = $"({class8.float_0:F2},{class8.float_1:F2},{class8.float_2:F2})";
 			}
 			uint_0 = uint_3;
+			uint_engaged = uint_3;
 			dateTime_0 = DateTime.Now;
 			return true;
 		}
@@ -845,9 +852,46 @@ internal static class Class412
 		uint_0 = 0u;
 	}
 
+	// The game keeps following its target to attack it (PlayerFollowToAttack) after we stop choosing it,
+	// so when the engaged monster leaves the zone we must tell the game to stop, not just forget the id.
+	internal static async Task smethod_16(GForm0 gform0_0, float float_3)
+	{
+		uint num = uint_engaged;
+		if (num == 0)
+		{
+			return;
+		}
+		Class398 @class = smethod_1();
+		if (!@class.bool_0)
+		{
+			return;
+		}
+		Class403 class2 = smethod_12(gform0_0, num);
+		if (class2 == null || class2.method_0())
+		{
+			uint_engaged = 0u;
+			return;
+		}
+		if (Class406.smethod_3(class2.float_0, class2.float_1, class2.float_2, @class.float_0, @class.float_1, @class.float_2, float_3))
+		{
+			return;
+		}
+		uint_engaged = 0u;
+		if (uint_0 == num)
+		{
+			uint_0 = 0u;
+		}
+		Class119 class3 = gform0_0.method_7();
+		if (class3 != null)
+		{
+			await class3.method_130().ConfigureAwait(continueOnCapturedContext: false);
+		}
+	}
+
 	public static void smethod_15()
 	{
 		uint_0 = 0u;
+		uint_engaged = 0u;
 		dateTime_0 = DateTime.MinValue;
 		bool_0 = false;
 		smethod_7();

@@ -905,6 +905,7 @@ internal static class Class65
 				class3.method_176(float_1, float_2, float_3, bool_17: true, "attack_anchor");
 				return false;
 			}
+			await Class412.smethod_16(gform0_0, float_0);
 			if (ireadOnlyList_0 != null && ireadOnlyList_0.Count != 0)
 			{
 				for (int i = 0; i < ireadOnlyList_0.Count; i++)
@@ -931,6 +932,7 @@ internal static class Class65
 	public static async Task<bool> smethod_1(GForm0 gform0_0, float float_0, float float_1, float float_2, float float_3)
 	{
 		List<uint> list = await Class447.smethod_7(gform0_0);
+		await Class412.smethod_16(gform0_0, float_0);
 		for (int i = 0; i < list.Count; i++)
 		{
 			uint num = list[i];
@@ -1006,6 +1008,7 @@ internal static class Class65
 				}
 				return false;
 			}
+			await Class412.smethod_16(gform0_0, float_0);
 			if (ireadOnlyList_0 != null)
 			{
 				for (int i = 0; i < ireadOnlyList_0.Count; i++)

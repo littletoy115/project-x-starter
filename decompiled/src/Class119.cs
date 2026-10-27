@@ -583,6 +583,8 @@ internal sealed class Class119 : IDisposable
 
 	private string string_11;
 
+	private string string_skillCheckLog;
+
 	private string string_12;
 
 	private string string_13;
@@ -3491,8 +3493,16 @@ internal sealed class Class119 : IDisposable
 			case 'h':
 				if (text2 == "skill_check")
 				{
-					method_208(jObject2.ToString());
-					action_14?.Invoke(smethod_17(jObject2));
+					IReadOnlyList<GStruct1> readOnlyList_skillCheck = smethod_17(jObject2);
+					// Raw skill_check JSON is dropped by the Class172 quiet filter; log a plain-text summary
+					// (only when it changes) so agent.log shows why a ticked skill slot was not cast.
+					string text_skillCheck = SkillCheckLogLine((bool?)jObject2["ok"] == true, readOnlyList_skillCheck);
+					if (text_skillCheck != string_skillCheckLog)
+					{
+						string_skillCheckLog = text_skillCheck;
+						method_208(text_skillCheck);
+					}
+					action_14?.Invoke(readOnlyList_skillCheck);
 				}
 				break;
 			}
@@ -3676,6 +3686,69 @@ internal sealed class Class119 : IDisposable
 			}
 		}
 		return list;
+	}
+
+	// code = SkillCheckEnum returned by the game's GameCharLogic.CHECKSKILL; -1 = runtime.js found no skill in that slot
+	private static string SkillCheckReason(int int_0)
+	{
+		switch (int_0)
+		{
+		case -1:
+			return "empty";
+		case 0:
+			return "OK";
+		case 1:
+			return "not-learned";
+		case 2:
+			return "cooldown";
+		case 3:
+			return "wrong-item";
+		case 4:
+			return "no-arrow";
+		case 5:
+			return "no-charm";
+		case 6:
+			return "no-HP";
+		case 7:
+			return "no-MP";
+		case 8:
+			return "no-SP";
+		case 9:
+			return "no-EXP";
+		case 10:
+			return "no-rebirth";
+		case 11:
+			return "no-CP";
+		case 12:
+			return "no-bullet";
+		case 13:
+			return "prohibited";
+		default:
+			return "code" + int_0.ToString(CultureInfo.InvariantCulture);
+		}
+	}
+
+	internal static string SkillCheckLogLine(bool bool_17, IReadOnlyList<GStruct1> ireadOnlyList_17)
+	{
+		StringBuilder stringBuilder = new StringBuilder("skill check");
+		if (!bool_17)
+		{
+			stringBuilder.Append(" FAILED");
+		}
+		stringBuilder.Append(':');
+		if (ireadOnlyList_17 == null || ireadOnlyList_17.Count == 0)
+		{
+			stringBuilder.Append(" (no slots)");
+		}
+		else
+		{
+			for (int i = 0; i < ireadOnlyList_17.Count; i++)
+			{
+				GStruct1 gStruct = ireadOnlyList_17[i];
+				stringBuilder.Append(" S").Append(gStruct.int_0.ToString(CultureInfo.InvariantCulture)).Append('=').Append(SkillCheckReason(gStruct.int_1));
+			}
+		}
+		return stringBuilder.ToString();
 	}
 
 	internal static IReadOnlyList<GStruct1> smethod_17(JObject jobject_0)
