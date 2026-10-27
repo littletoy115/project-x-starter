@@ -575,6 +575,9 @@ internal static class Class412
 
 	private static DateTime dateTime_0;
 
+	// Last time the stuck-monster tracker dropped monsters that died or left the census.
+	private static DateTime dateTime_1;
+
 	private static bool bool_0;
 
 	private static float float_0;
@@ -649,6 +652,12 @@ internal static class Class412
 	{
 		List<uint> ireadOnlyList_ = await Class447.smethod_7(gform0_0);
 		int num = await gform0_0.smethod_12(new int[6] { 1, 2, 3, 4, 5, 26 });
+		if (num != 1 && num != 2)
+		{
+			// Leaving current-point / circle mode: re-anchor at the character's position when it is picked
+			// again, instead of running back to the spot saved the first time it was used this session.
+			bool_0 = false;
+		}
 		switch (num)
 		{
 		default:
@@ -713,6 +722,12 @@ internal static class Class412
 
 	public static async Task<bool> smethod_11(GForm0 gform0_0, uint uint_1)
 	{
+		DateTime utcNow = DateTime.UtcNow;
+		if ((utcNow - dateTime_1).TotalMilliseconds >= 500.0)
+		{
+			dateTime_1 = utcNow;
+			class394_0.method_4(gform0_0.method_5().method_2());
+		}
 		Class403 @class = smethod_12(gform0_0, uint_1);
 		bool num;
 		int num3;
@@ -729,9 +744,12 @@ internal static class Class412
 			}
 			if (class394_0.method_0(@class.uint_0, @class.byte_0, @class.ushort_0, @class.ushort_1, @class.float_0, @class.float_2, (int)Math.Min(@class.ushort_2, int.MaxValue), class2.float_0, class2.float_2, class2.byte_0, DateTime.UtcNow))
 			{
-				if (uint_0 == @class.uint_0)
+				gform0_0.method_7()?.method_209("monster blacklist 60s (hp not dropping): id=" + @class.uint_0 + " name=" + (Class447.smethod_4(gform0_0, @class.ushort_0, @class.ushort_1) ?? "?") + " hp=" + @class.ushort_2 + "/" + @class.ushort_3 + " pos=" + Class440.smethod_3(@class.float_0, @class.float_2));
+				// uint_0 is already 0 when the last hit was a skill, so also check the engaged id.
+				if (uint_0 == @class.uint_0 || uint_engaged == @class.uint_0)
 				{
 					uint_0 = 0u;
+					uint_engaged = 0u;
 					Class119 class3 = gform0_0.method_7();
 					if (class3 != null)
 					{

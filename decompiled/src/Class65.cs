@@ -1061,7 +1061,18 @@ internal static class Class65
 		if (@class != null && !@class.method_0())
 		{
 			string string_ = ((!flag || string.IsNullOrEmpty(text)) ? null : Class447.smethod_4(gform0_0, @class.ushort_0, @class.ushort_1));
-			return !Class412.smethod_13(@class) && smethod_6(@class.byte_0, @class.uint_0, @class.ushort_2, @class.ushort_3, string_, flag, text);
+			if (@class.byte_0 != 2)
+			{
+				return false;
+			}
+			string text2 = (Class412.smethod_13(@class) ? "blacklisted" : smethod_11(@class.ushort_2, @class.ushort_3, string_, flag, text));
+			if (text2 != null)
+			{
+				smethod_12(gform0_0, @class, text2);
+				return false;
+			}
+			dictionary_0.Remove(@class.uint_0);
+			return true;
 		}
 		return false;
 	}
@@ -1072,27 +1083,46 @@ internal static class Class65
 		{
 			return false;
 		}
-		if (bool_0 && !string.IsNullOrEmpty(string_1) && (string_0 == null || !smethod_9(string_0, string_1)))
+		return smethod_11(int_0, int_1, string_0, bool_0, string_1) == null;
+	}
+
+	// Why a monster in the census is not attacked; null = it may be attacked.
+	private static string smethod_11(long int_0, long int_1, string string_0, bool bool_0, string string_1)
+	{
+		if (bool_0 && !string.IsNullOrEmpty(string_1))
 		{
-			return false;
+			if (string_0 == null)
+			{
+				return "name-unknown";
+			}
+			if (!smethod_9(string_0, string_1))
+			{
+				return "name-not-selected";
+			}
 		}
-		if (int_1 >= 20000 && int_0 <= 6)
+		if ((int_1 >= 20000 && int_0 <= 6) || (int_1 >= 10000 && int_0 <= 5) || (int_1 >= 5000 && int_0 <= 4) || (int_1 >= 1000 && int_0 <= 3) || int_0 <= 2)
 		{
-			return false;
+			return "hp-too-low";
 		}
-		if (int_1 >= 10000 && int_0 <= 5)
+		return null;
+	}
+
+	// Last skip reason logged per monster id, so agent.log gets one line per change instead of one per tick.
+	private static readonly Dictionary<uint, string> dictionary_0 = new Dictionary<uint, string>();
+
+	private static void smethod_12(GForm0 gform0_0, Class403 class403_0, string string_0)
+	{
+		if (dictionary_0.TryGetValue(class403_0.uint_0, out var value) && value == string_0)
 		{
-			return false;
+			return;
 		}
-		if (int_1 >= 5000 && int_0 <= 4)
+		if (dictionary_0.Count > 500)
 		{
-			return false;
+			dictionary_0.Clear();
 		}
-		if (int_1 >= 1000 && int_0 <= 3)
-		{
-			return false;
-		}
-		return int_0 > 2;
+		dictionary_0[class403_0.uint_0] = string_0;
+		string text = Class447.smethod_4(gform0_0, class403_0.ushort_0, class403_0.ushort_1) ?? "?";
+		gform0_0.method_7()?.method_209("monster skip: " + string_0 + " id=" + class403_0.uint_0 + " name=" + text + " hp=" + class403_0.ushort_2 + "/" + class403_0.ushort_3);
 	}
 
 	private static Class403 smethod_7(GForm0 gform0_0, uint uint_0)
@@ -1133,15 +1163,7 @@ internal static class Class65
 
 	private static bool smethod_9(string string_0, string string_1)
 	{
-		if (string_0.Equals(string_1, StringComparison.OrdinalIgnoreCase))
-		{
-			return true;
-		}
-		if (string_1.IndexOf(string_0, StringComparison.OrdinalIgnoreCase) < 0)
-		{
-			return string_0.IndexOf(string_1, StringComparison.OrdinalIgnoreCase) >= 0;
-		}
-		return true;
+		return Class447.smethod_16(string_0, string_1);
 	}
 
 	public static void smethod_10()

@@ -640,9 +640,30 @@ internal static class Class447
 
 	private static bool smethod_15(string string_0, string string_1)
 	{
-		if (!string.IsNullOrEmpty(string_1) && string_0 != null)
+		return smethod_16(string_0, string_1);
+	}
+
+	// Selected-monster match used by both "attack selected first" (sort) and "attack only selected" (filter).
+	// Whole-name, case-insensitive: a substring test let "Wolf" match a selection of "Wolf King".
+	// The selection may hold several names separated by ',' or '|'.
+	internal static bool smethod_16(string string_0, string string_1)
+	{
+		if (string.IsNullOrWhiteSpace(string_1) || string_0 == null)
 		{
-			return string_0.Contains(string_1);
+			return false;
+		}
+		string text = string_0.Trim();
+		if (text.Length == 0)
+		{
+			return false;
+		}
+		string[] array = string_1.Split(',', '|');
+		for (int i = 0; i < array.Length; i++)
+		{
+			if (string.Equals(array[i].Trim(), text, StringComparison.OrdinalIgnoreCase))
+			{
+				return true;
+			}
 		}
 		return false;
 	}

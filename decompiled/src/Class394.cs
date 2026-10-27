@@ -95,6 +95,49 @@ internal sealed class Class394
 		dictionary_1.Clear();
 	}
 
+	// Forget monsters that died or left the census. The game reuses crow ids, so without this a monster
+	// respawning with the same id at the same spot inherited the old one's stuck count and 60 s blacklist.
+	internal void method_4(IReadOnlyList<Class403> ireadOnlyList_0)
+	{
+		if (dictionary_0.Count == 0 && dictionary_1.Count == 0)
+		{
+			return;
+		}
+		HashSet<uint> hashSet = new HashSet<uint>();
+		if (ireadOnlyList_0 != null)
+		{
+			for (int i = 0; i < ireadOnlyList_0.Count; i++)
+			{
+				Class403 @class = ireadOnlyList_0[i];
+				if (@class != null && !@class.method_0())
+				{
+					hashSet.Add(@class.uint_0);
+				}
+			}
+		}
+		smethod_3(dictionary_0, hashSet);
+		smethod_3(dictionary_1, hashSet);
+	}
+
+	private static void smethod_3(Dictionary<uint, Class395> dictionary_2, HashSet<uint> hashSet_0)
+	{
+		List<uint> list = null;
+		foreach (uint key in dictionary_2.Keys)
+		{
+			if (!hashSet_0.Contains(key))
+			{
+				(list ?? (list = new List<uint>())).Add(key);
+			}
+		}
+		if (list != null)
+		{
+			for (int i = 0; i < list.Count; i++)
+			{
+				dictionary_2.Remove(list[i]);
+			}
+		}
+	}
+
 	private static Class395 smethod_0(uint uint_0, byte byte_0, ushort ushort_0, ushort ushort_1, float float_0, float float_1, int int_0, float float_2, float float_3)
 	{
 		return new Class395

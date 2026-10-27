@@ -746,7 +746,8 @@ internal static class Class2
 					}
 					if (!@struct.bool_0)
 					{
-						if (!(dateTime_1 != DateTime.MinValue))
+						// Look for monsters on every tick, also while the "wait" countdown runs: before, once the
+						// countdown started, monsters spawning at this point were ignored until it moved on.
 						{
 							Class398 @class = Class412.smethod_1();
 							bool flag2 = await Class65.smethod_1(gform0_0, float_0, @class.float_0, @class.float_1, @class.float_2);
@@ -772,6 +773,7 @@ internal static class Class2
 							}
 							int num5 = Class440.smethod_1(await gform0_0.smethod_6(75), await gform0_0.smethod_8(45));
 							bool_1 = false;
+							dateTime_1 = DateTime.MinValue;
 							if (dateTime_0 == DateTime.MinValue)
 							{
 								dateTime_0 = DateTime.Now;
@@ -785,12 +787,6 @@ internal static class Class2
 							await gform0_0.smethod_13(73, smethod_2("ต\u0e35", num5, dateTime_0) ?? string.Empty);
 							return true;
 						}
-						await gform0_0.smethod_13(73, smethod_2("รอ", @struct.int_0, dateTime_1) ?? string.Empty);
-						if (smethod_3(@struct.int_0))
-						{
-							smethod_4(readOnlyList.Count, flag);
-						}
-						return true;
 					}
 					await gform0_0.smethod_13(73, smethod_2("รอ", @struct.int_0, dateTime_1) ?? string.Empty);
 					if (smethod_3(@struct.int_0))
