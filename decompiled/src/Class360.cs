@@ -857,19 +857,27 @@ internal static class Class360
 			smethod_19();
 			return false;
 		}
+		byte? b = gform0_0.method_5().method_0()?.byte_5;
+		if (b.HasValue && b.Value != byte_1)
+		{
+			byte_1 = b.Value;
+			gform0_0.method_7()?.method_209("active box effect: " + smethod_35(b.Value));
+		}
 		List<int> obj = await Class104.smethod_0(gform0_0, 29, 33);
+		// Box types (ItemQuestionTypeEnum): Speed Up 1, Crazy 2, Power Up 3, EXP 4, Lucky 6. Their MAX tiers are
+		// separate types (Speed Up MAX 9, Madness 10, Power Up MAX 11) and used to slip past the lock.
 		int num2 = 0;
 		if (obj.Contains(29))
 		{
-			num2 |= smethod_0(1);
+			num2 |= smethod_0(1) | smethod_0(9);
 		}
 		if (obj.Contains(30))
 		{
-			num2 |= smethod_0(2);
+			num2 |= smethod_0(2) | smethod_0(10);
 		}
 		if (obj.Contains(31))
 		{
-			num2 |= smethod_0(3);
+			num2 |= smethod_0(3) | smethod_0(11);
 		}
 		if (obj.Contains(32))
 		{
@@ -1157,15 +1165,24 @@ internal static class Class360
 		}
 		if (bool_6 && flag2)
 		{
+			smethod_34(gform0_0, class403_0, "no-box option");
 			return false;
 		}
+		// LuckyBox (Lock): a ticked type is never picked up ...
 		if (flag2 && (int_2 & smethod_0(class403_0.method_5())) != 0)
 		{
+			smethod_34(gform0_0, class403_0, "box type " + smethod_35(class403_0.method_5()) + " is locked");
 			return false;
 		}
+		// ... and while the character has a ticked effect running, no box is picked up so it is not replaced.
 		if (flag2 && byte_0 != 0 && (int_2 & smethod_0(byte_0)) != 0)
 		{
+			smethod_34(gform0_0, class403_0, "active effect " + smethod_35(byte_0) + " is locked");
 			return false;
+		}
+		if (flag2)
+		{
+			smethod_34(gform0_0, class403_0, null);
 		}
 		switch (int_1)
 		{
@@ -1840,5 +1857,65 @@ internal static class Class360
 		long_1 = 0L;
 		smethod_20(bool_5: true);
 		class173_0.method_1();
+		dictionary_1.Clear();
+	}
+
+	// Last box decision logged per ground item id (null = may be picked), one agent.log line per change.
+	private static readonly Dictionary<uint, string> dictionary_1 = new Dictionary<uint, string>();
+
+	// Last logged box effect running on the character (SQItemFact.Type).
+	private static byte byte_1;
+
+	private static void smethod_34(GForm0 gform0_0, Class403 class403_0, string string_0)
+	{
+		string text = string_0 ?? "pick";
+		if (dictionary_1.TryGetValue(class403_0.uint_0, out var value) && value == text)
+		{
+			return;
+		}
+		if (dictionary_1.Count > 256)
+		{
+			dictionary_1.Clear();
+		}
+		dictionary_1[class403_0.uint_0] = text;
+		gform0_0.method_7()?.method_209("box " + smethod_35(class403_0.method_5()) + " id=" + class403_0.uint_0 + ": " + ((string_0 == null) ? "may pick up" : ("skip, " + string_0)));
+	}
+
+	// ItemQuestionTypeEnum name, as shown in game.
+	private static string smethod_35(byte byte_0)
+	{
+		switch (byte_0)
+		{
+		case 0:
+			return "None";
+		case 1:
+			return "SpeedUp";
+		case 2:
+			return "Crazy";
+		case 3:
+			return "PowerUp";
+		case 4:
+			return "EXP";
+		case 5:
+			return "EXPGet";
+		case 6:
+			return "Lucky";
+		case 7:
+			return "Bomb";
+		case 8:
+			return "MobGen";
+		case 9:
+			return "SpeedUpMAX";
+		case 10:
+			return "Madness";
+		case 11:
+			return "PowerUpMAX";
+		case 12:
+			return "Heal";
+		case 13:
+			return "Size";
+		default:
+			return "type" + byte_0;
+		}
 	}
 }
