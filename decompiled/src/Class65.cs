@@ -1170,4 +1170,17 @@ internal static class Class65
 	{
 		dateTime_0 = DateTime.MinValue;
 	}
+
+	// Countdown text of "Reset circle mode if > N s" while it is armed, else null. The timer keeps
+	// running while another loop step (pickup, buff, ...) holds the bot, so show it from there too.
+	internal static async Task<string> smethod_13(GForm0 gform0_0)
+	{
+		DateTime dateTime = dateTime_0;
+		if (dateTime == DateTime.MinValue || !(await gform0_0.smethod_7(2)) || !(await gform0_0.smethod_6(63)) || !int.TryParse(await gform0_0.smethod_8(34), out var result) || result <= 0)
+		{
+			return null;
+		}
+		double num = Math.Max(0.0, (double)result - (DateTime.Now - dateTime).TotalSeconds);
+		return "อีก " + num.ToString("F0") + " วินาที จะวิ่งกลับกลางวงกลม";
+	}
 }

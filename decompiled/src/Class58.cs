@@ -536,14 +536,21 @@ internal static class Class58
 			while (!gform0_0.method_4())
 			{
 				await Task.Delay(300);
-				if (!(await gform0_0.smethod_6(42)) || !gform0_0.method_6() || gform0_0.method_5().method_0() == null)
+				if (!(await gform0_0.smethod_6(42)) || !gform0_0.method_6())
 				{
 					continue;
 				}
+				if (gform0_0.method_5().method_0() == null)
+				{
+					await smethod_2(gform0_0, "no-game-data", "รอข้อมูลจากเกม");
+					continue;
+				}
+				smethod_3(gform0_0);
 				try
 				{
 					if (await GClass3.smethod_0(gform0_0))
 					{
+						await smethod_2(gform0_0, "rebirth", "รอเกิดใหม่");
 						continue;
 					}
 					bool num = await gform0_0.smethod_7(26);
@@ -562,25 +569,45 @@ internal static class Class58
 					{
 						flag = await GClass15.smethod_0(gform0_0, 2);
 					}
-					if (flag || !(await Class342.smethod_11(gform0_0)) || await GClass19.smethod_0(gform0_0) || await Class356.smethod_0(gform0_0))
+					if (flag)
 					{
+						await smethod_2(gform0_0, "GClass15", "หยุด/แจ้งเตือน");
+						continue;
+					}
+					if (!(await Class342.smethod_11(gform0_0)))
+					{
+						await smethod_2(gform0_0, "buff", "บัพ");
+						continue;
+					}
+					if (await GClass19.smethod_0(gform0_0))
+					{
+						await smethod_2(gform0_0, "GClass19", "แจ้งเตือนผู้เล่น");
+						continue;
+					}
+					if (await Class356.smethod_0(gform0_0))
+					{
+						await smethod_2(gform0_0, "follow-party", "ตามตี้");
 						continue;
 					}
 					if (flag3)
 					{
+						await smethod_2(gform0_0, "buff-only", "บัพอย่างเดียว");
 						Class412.smethod_14();
 					}
 					else
 					{
 						if (await GClass7.smethod_0(gform0_0))
 						{
+							await smethod_2(gform0_0, "pet", "สัตว์เลี้ยง");
 							continue;
 						}
 						float num2 = await gform0_0.smethod_10(1);
 						if (await Class360.smethod_1(gform0_0, num2 + 10f))
 						{
+							await smethod_2(gform0_0, "pickup", "เก็บของ");
 							continue;
 						}
+						await smethod_2(gform0_0, "attack", null);
 						if (!flag2)
 						{
 							await Class412.smethod_10(gform0_0, num2);
@@ -598,9 +625,10 @@ internal static class Class58
 						continue;
 					}
 				}
-				catch (Exception)
+				catch (Exception ex)
 				{
 					@enum = (Enum5)3;
+					gform0_0.method_7()?.method_209("bot loop stopped by error in step '" + string_0 + "': " + ex.GetType().Name + ": " + ex.Message);
 					throw;
 				}
 			}
@@ -618,6 +646,72 @@ internal static class Class58
 		{
 			@class.method_11(@enum);
 			gform0_0.method_54(@class);
+			string_0 = null;
+			object_0 = null;
+		}
+	}
+
+	// Which step of the loop above ran last (attack, pickup, buff, ...) and since when.
+	// The "back to circle centre" countdown (label57) is only refreshed by the attack step, so it looked
+	// frozen whenever another step held the loop; log step changes and say on the label what is running.
+	private static string string_0;
+
+	private static DateTime dateTime_0;
+
+	private static DateTime dateTime_1;
+
+	// Last player snapshot seen and when it changed: a snapshot that stops changing means no data
+	// arrives from the game (agent / frida / adb / emulator), not that the bot logic is stuck.
+	private static object object_0;
+
+	private static DateTime dateTime_2;
+
+	private static bool bool_0;
+
+	private static async Task smethod_2(GForm0 gform0_0, string string_1, string string_2)
+	{
+		DateTime now = DateTime.Now;
+		if (string_1 != string_0)
+		{
+			string text = ((string_0 == null) ? string.Empty : (" (after " + string_0 + " " + (now - dateTime_0).TotalSeconds.ToString("F1") + "s)"));
+			gform0_0.method_7()?.method_209("bot step: " + string_1 + text);
+			string_0 = string_1;
+			dateTime_0 = now;
+			dateTime_1 = now;
+		}
+		else if ((now - dateTime_1).TotalSeconds >= 20.0)
+		{
+			dateTime_1 = now;
+			gform0_0.method_7()?.method_209("bot step: still " + string_1 + " for " + (now - dateTime_0).TotalSeconds.ToString("F0") + "s");
+		}
+		if (string_2 != null)
+		{
+			string text2 = await Class65.smethod_13(gform0_0);
+			if (text2 != null)
+			{
+				await gform0_0.smethod_13(57, text2 + " (พัก: " + string_2 + ")");
+			}
+		}
+	}
+
+	private static void smethod_3(GForm0 gform0_0)
+	{
+		object obj = gform0_0.method_5();
+		DateTime now = DateTime.Now;
+		if (obj != object_0)
+		{
+			if (bool_0)
+			{
+				gform0_0.method_7()?.method_209("game data resumed after " + (now - dateTime_2).TotalSeconds.ToString("F0") + "s");
+			}
+			object_0 = obj;
+			dateTime_2 = now;
+			bool_0 = false;
+		}
+		else if (!bool_0 && (now - dateTime_2).TotalSeconds >= 5.0)
+		{
+			bool_0 = true;
+			gform0_0.method_7()?.method_209("no game data update for 5s (agent/frida/adb/emulator?) - last step: " + (string_0 ?? "-"));
 		}
 	}
 }
