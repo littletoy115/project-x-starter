@@ -44,6 +44,46 @@ backup ก่อนตัด: `_backup/src-before-strip-network/` (src ทั้
   - checkbox แจ้งเตือนอื่น ๆ ในแท็บนี้ (GM, ตาย, กระซิบ ฯลฯ) ยังเป็น UI ค้างไม่ได้ต่อกับโค้ด
 - `js/runtime.renamed.js` ยังเป็นของเดิม (มีโค้ด license) — ไว้อ่านเทียบเท่านั้น
 
+### แท็บที่ตัดออก (2026-10-24, branch `v2`)
+แท็บที่เป็น UI เปล่า: handler ว่างทุกตัว และไม่มีโค้ดไหนอ่านค่า — ทั้งอ้าง field ตรง ๆ และหาด้วยชื่อผ่าน `Class366` (`"checkBox" + n` ฯลฯ), `Controls.Find`, self-test
+| แท็บ | ที่เคยมี |
+|---|---|
+| AboutMe | ช่องทางติดต่อคนขาย (label + PictureBox ว่าง 3 อัน) |
+| หยุด - เริ่ม | ตั้งเวลาเริ่ม/หยุดบอท |
+| Chat-Bot | ชุดคำถาม/คำตอบ, ตอบด้วย AI (VIP) |
+| ProxyIP | รายการ proxy IP/Port/User/Pass + ปุ่มเพิ่ม/ลบ/Refresh |
+| CPU | ล็อค FPS ลด CPU, หยุดภาพลด GPU |
+| Login | จัดการ User/Pass/SubPass สำหรับ AutoLogin |
+
+- ลบ control 94 ตัว (statement ใน designer 865 บรรทัด, field, handler ว่าง 19 ตัว) ด้วยสคริปต์ที่หา control ลูกทั้งหมดของแท็บ · `tabControl_0_SelectedIndexChanged` เอา `tabPage_15` ออก
+- ยังเหลือ UI เปล่าในแท็บที่ใช้อยู่: checkbox `AutoLogin` + combo `ID` ด้านล่างฟอร์ม; แท็บ Buy ทั้งแท็บ; Alert (ใช้ได้แค่ตารางผู้เล่น + ปุ่ม Load All Player); Cheat (รับปาตี้อัตโนมัติ, หาก disconnect, Red Alert, Load All Setting); Pet (ใช้สกิล A/B); DisCord-Notify (ทุกอย่างยกเว้นเปิดใช้ + webhook)
+### กันตัวละครค้าง (2026-10-24, branch `v2`) — `StuckGuard.cs`
+แท็บ Monster ใต้ "ระบบ Lock Monster": ☐ **กันตัวละครค้าง** + ยืนเฉยเกิน [3] นาที + บรรทัดสถานะ (ยืนเฉยมา m:ss) — ติ๊กแยกรายตัวละคร (`Class11` เก็บให้ใน `<hero>_Setting.ini`: `checkBoxStuckGuard`, `textBoxStuckGuardMin`)
+- เช็คทุก 10 วิ (WinForms timer บน UI thread) จากข้อมูลที่บอทได้อยู่แล้ว: hero snap (`t1` 20 Hz — ตำแหน่ง/HP/สถานะ) + census (เลือดเป้าหมาย) → ไม่ยิงอะไรเข้าเกมเพิ่ม
+- **นับว่าคืบหน้า**: เดินห่างจุดเดิม ≥ 3 หน่วย หรือเป้าหมายเลือดลด/หายไปจาก census (ตาย) · ขยับไปมา ±2 (attack_stop_nudge) ไม่นับ
+- **ไม่เช็ค** ตอน: ไม่ติ๊ก, Bot ปิด, loop ไม่ได้รัน, ไม่ได้ attach, ตาย (HP 0), โหมดตามหัวตี้ / วิ่งตามเพื่อน / Heal (ยืนเฉยเป็นปกติ)
+- ยืนเฉยครบ N นาที → soft reset `Class412.smethod_15()` + ก้าว 4 หน่วย → ทุก 2 นาทีถัดไป reset + เดิน 12 หน่วย (หมุนทิศ golden angle) → ครั้งที่ 3 แจ้ง Discord หนึ่งครั้ง (ถ้าเปิด Discord) และพอกลับมาขยับจะส่ง "✅ กลับมาขยับแล้ว"
+- reset ทำใน loop หลัก (`Class58`, ต้นรอบ ผ่าน `TakeRecovery`) เพราะ state การตีเป็นของ loop นั้น · ถ้า loop ไม่วนเกิน 20 วิ (ค้างอยู่ในขั้นใดขั้นหนึ่ง) จะส่งคำสั่งเดินตรง ๆ แทน (ไม่ reset)
+- ไม่มี hero snap ใหม่เกิน 60 วิ (เกม/agent ค้าง) → ไม่สั่งเดิน log อย่างเดียว
+- log `[Stuck] <ชื่อตัวละคร> …` ใน `auto.log`: `step=` (loop อยู่ขั้นไหน), `rounds ended at:` (แต่ละรอบจบที่ขั้นไหน นับตั้งแต่ขยับครั้งล่าสุด), pos, `act`/`action`/`path`, target hp, `data age` · ช่วงยืนเฉย ≥ 60 วิที่หายเองก่อนถึงเกณฑ์ก็ log ด้วย (`ended by itself`) ไว้ดูว่าค้างบ่อยแค่ไหน
+- `Class58`: `if (ขาย || !rebuff || party-buff || follow) continue;` แยกเป็น if ทีละขั้น (ลำดับ/short-circuit เหมือนเดิม) เพื่อใส่ `LoopStep`
+- ทดสอบ: `Capybara-KlassX.exe --test-stuck-guard` (นาฬิกาปลอม 19 เคส ไม่ต้องใช้เกม)
+- ทดสอบจริง 2026-10-24 จอ Core (Syndicates) ยืนที่ไม่มีมอน ตั้ง 1 นาที: 1:09 ก้าว 4 หน่วย → 3:19 เดิน 12 → 5:19 เดิน 12 + Discord (MoveReply ok ทุกครั้ง, Discord ส่งผ่าน) · ช่วงตีจริง 13 นาที (EXP +25%) ไม่ trigger มั่ว
+- ทดสอบ build ใหม่โดยไม่ทับ `bin/` ที่บอทอื่นใช้: build ลงโฟลเดอร์อื่น → ทำ junction `config` → `bin\Release\net472\config` (ใช้ `LastRunPid`/ค่าตั้งชุดเดียวกัน) → เปิดแล้วกด **Select** (เกาะเกมเดิม) ห้าม **Run** (Run สั่ง `am force-stop` แล้วเปิดเกมใหม่ = หลุดต้องล็อกอิน) · บอทตัวเดิมของจอนั้นต้อง**ปิดหน้าต่าง** (Stop อย่างเดียว agent ยังเกาะเกม)
+
+### ระบบบัพ (แท็บ Skill Potion) — `Class342` (แกะ + ทดสอบจริง 2026-10-24)
+- **สกิลบัพต้องอยู่หน้าสกิลที่ 3 ของเกม** (ป้าย "Buff <--- F4" ในบอทผิด) — agent อ่านไฟล์ที่เกมเซฟ `/storage/emulated/0/Android/data/com.klab.klassxonline/files/<charId>/hotkey.save3` (`Slots[0..9].skill.mainId/subId`, ว่าง = 65535) · บอทขออ่านใหม่ทุก 10 วิ (`GForm0.method_108` → `method_166(3)`) · เกมเขียนไฟล์ตอนแก้หน้าสกิล
+- Buff N = ช่อง N ของหน้า 3 · **1–7**: เลขข้างช่อง = วินาที → ร่ายเมื่อบัพหายจากตัว หรือเหลือ ≤ เลขนั้น (ไม่ใช่ตัวเลข = ร่ายเฉพาะตอนหาย) · **8**: เลข = ร่ายทุก ๆ N วิ (Heal) · **9–10**: บัพปาร์ตี้ (`GClass19` + ปุ่ม Party)
+- ไล่ 1→7 แล้ว 8 ร่ายทีละสกิล ตัวแรกที่ถึงเวลาและ `ready=0` · agent สลับไปหน้า 3 → เช็คว่าช่องยังเป็นสกิลเดิม (`mismatch`) → ร่าย → สลับกลับ · รอผล ≤ 7 วิ (loop หลักหยุดตี) แล้วรอไอคอนขึ้น ≤ 5 วิ · `busy` = พักช่อง 1 วิ, ผิดพลาดอื่น = 5 วิ, `unavailable` = ปิดบัพทั้ง session (`smethod_8`)
+- ป้ายข้างช่อง = วินาทีที่บัพเหลือ (เขียว > เกณฑ์, ชมพู ≤ เกณฑ์/ไม่มีบัพ, `0` = ไม่ติ๊ก/ช่องว่าง/ยังอ่านหน้า 3 ไม่ได้)
+- log: `[Buff] <ตัวละคร> …` ใน `auto.log` (เพิ่ม 2026-10-24: ร่าย, ผลตอบกลับ, เปลี่ยนสถานะ — `smethod_14` เดิมว่าง)
+- ทดสอบจริง Syndicates สกิล 5:0 (อยู่ ~89 วิ, เกณฑ์ 20): ร่ายติดตอนไม่มีบัพ และตอนเหลือ 17.6 วิ · แต่**ระหว่างตีมอน เกมตอบ `busy` 27 ครั้ง** (บอทตีต่อระหว่างรอ ตัวละครเลยไม่ว่าง) → บัพหลุด ~26 วิ
+- ปุ่ม Attack F1/F2/F3 ไม่ได้ต่อกับโค้ด — บอทตีด้วยหน้าสกิลที่เปิดค้างในเกม (`skill_bar`)
+
+- **ความเร็ว (2026-10-24)**: `Class366.FindCached` จำ control ตามชื่อไว้ (เดิม `Controls.Find` ไล่ทั้ง 567 control ทุกครั้งที่อ่านค่า ~0.25 ms บน UI thread, หลายสิบครั้งต่อรอบ 300 ms) → อ่านค่าเร็วขึ้น ~20 เท่า (0.257 → 0.013 ms) · ใช้กับ `Class366.smethod_31` และ `GForm0.method_45/46` (ตาราง/ปุ่ม Looper) · ผลลัพธ์เหมือนเดิม (ตัวแรกที่เจอ, control ไม่เคยถูกสร้างใหม่หลังโหลดฟอร์ม)
+- self-test ที่ล้มอยู่แล้วตั้งแต่ build เดิม (ไม่ใช่จากการแก้): `--test-pick` (crash), `--test-bag` (22), `--test-rebuff` (3), `--test-selfbuffs` (5), `--test-boxbuff` (1), `--test-zone-mode`, `--test-automatic-loop`
+- **ระวังก่อนลบ control**: `Class366`/`Class104`/`Class91` อ่าน UI ด้วยชื่อ + เลข (`smethod_6(n)` = `checkBox{n}`, `smethod_8(n)` = `textBox{n}`, `smethod_7/12/29` = `radioButton`, `smethod_10/28` = `trackBar`, `smethod_13/25/26/27` = `label`) — ชื่อที่ว่าคือ `.Name` ใน designer ไม่ใช่ชื่อ field (`checkBox_105.Name = "checkBox5"`)
+
 ### `config\offsets.json`
 build copy ไปไว้ข้าง exe ให้อัตโนมัติ · รับได้ 2 แบบ: `{ "Addr_...": "0x..." }` (key → value ตรง ๆ) หรือรูปแบบเดิมของ server `{ "MemoryPointers": [ { "Key", "Value" } ] }` (มี `"Offsets"` ครอบหรือไม่ก็ได้)
 - **ต้องมี 5 ตัว** ไม่งั้นกด Run จะขึ้น "Offsets not loaded - <เหตุผล>": `Addr_Function_PlayerHandler_Update`, `Addr_Function_PlayerController_FrameMove`, `Addr_Function_OnManualMovement`, `KlassX_Build_VersionCode` (= 33 จาก AndroidManifest), `KlassX_Build_UnityVersion` (= 6000.3.8f1 จาก `data.unity3d`) — ใส่ไว้แล้ว

@@ -190,6 +190,25 @@ internal sealed class DiscordNotifier
 		Enqueue(text + " — " + Who(heroName), null, null);
 	}
 
+	// StuckGuard: once per stall, on its third try to get the character moving; NotifyUnstuck closes it.
+	internal void NotifyStuck(string heroName, TimeSpan idle, string why)
+	{
+		if (!enabled)
+		{
+			return;
+		}
+		Enqueue("🧍 **ตัวละครค้าง** — " + Who(heroName) + "\nยืนเฉยมา " + (int)idle.TotalMinutes + " นาที · " + why, null, null);
+	}
+
+	internal void NotifyUnstuck(string heroName, TimeSpan idle)
+	{
+		if (!enabled)
+		{
+			return;
+		}
+		Enqueue("✅ กลับมาขยับแล้ว (ค้างไป " + (int)idle.TotalMinutes + " นาที) — " + Who(heroName), null, null);
+	}
+
 	// Sends straight away (ignores the enabled switch) and returns null on success, else the reason.
 	// Attaches the newest captcha the bot has archived, if any, so the image upload is tested too.
 	internal async Task<string> SendTestAsync(string url, string heroName)

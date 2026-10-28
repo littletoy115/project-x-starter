@@ -389,10 +389,17 @@ internal static class Class342
 
 	private static void smethod_12(long long_6, string string_6, string string_7)
 	{
-		if (smethod_13(string_2) && (!(string_6 == string_5) || long_6 - long_5 >= 2000L))
+		// one trace line per state change; "not_due" (every ticked buff is up) stays quiet
+		int end = string_6.IndexOf(' ');
+		string state = (end < 0) ? string_6 : string_6.Substring(0, end);
+		if (state == string_5)
 		{
-			string_5 = string_6;
-			long_5 = long_6;
+			return;
+		}
+		string_5 = state;
+		long_5 = long_6;
+		if (smethod_13(state))
+		{
 			smethod_14(string_7);
 		}
 	}
@@ -402,8 +409,12 @@ internal static class Class342
 		return string_6 != "not_due";
 	}
 
+	// rebuff trace sink ("[Buff] <hero> ..." in auto.log), set by GForm0; null in self-tests
+	internal static Action<string> Trace;
+
 	private static void smethod_14(string string_6)
 	{
+		Volatile.Read(ref Trace)?.Invoke(string_6);
 	}
 
 	internal static string smethod_15(string string_6, bool bool_1, int int_2, string string_7)

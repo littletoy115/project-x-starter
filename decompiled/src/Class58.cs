@@ -531,17 +531,31 @@ internal static class Class58
 	{
 		Class148 @class = gform0_0.method_14();
 		Enum5 @enum = (Enum5)4;
+		StuckGuard stuckGuard = gform0_0.GetStuckGuard();
 		try
 		{
 			while (!gform0_0.method_4())
 			{
 				await Task.Delay(300);
+				stuckGuard?.LoopStep(StuckGuard.RoundStart);
 				if (!(await gform0_0.smethod_6(42)) || !gform0_0.method_6() || gform0_0.method_5().method_0() == null)
 				{
 					continue;
 				}
 				try
 				{
+					// "กันตัวละครค้าง" saw no movement and no damage for minutes: drop the current plan, step away,
+					// and let the next rounds pick targets and positions from scratch
+					StuckGuard.Recovery recovery = stuckGuard?.TakeRecovery();
+					if (recovery != null)
+					{
+						stuckGuard.LoopStep("unstick");
+						Class412.smethod_15();
+						gform0_0.method_7()?.method_177(recovery.X, recovery.Y, recovery.Z, recovery.AllowFar, recovery.Source);
+						await Task.Delay(recovery.HoldMs);
+						continue;
+					}
+					stuckGuard?.LoopStep("death");
 					if (await GClass3.smethod_0(gform0_0))
 					{
 						continue;
@@ -558,11 +572,28 @@ internal static class Class58
 						flag = await gform0_0.smethod_6(92);
 					}
 					bool flag3 = flag;
+					stuckGuard?.LoopStep("sell");
 					if (flag = !flag3)
 					{
 						flag = await GClass15.smethod_0(gform0_0, 2);
 					}
-					if (flag || !(await Class342.smethod_11(gform0_0)) || await GClass19.smethod_0(gform0_0) || await Class356.smethod_0(gform0_0))
+					// one check per step (same order and short-circuit as the old single ||) so StuckGuard can tell where rounds stop
+					if (flag)
+					{
+						continue;
+					}
+					stuckGuard?.LoopStep("rebuff");
+					if (!(await Class342.smethod_11(gform0_0)))
+					{
+						continue;
+					}
+					stuckGuard?.LoopStep("party-buff");
+					if (await GClass19.smethod_0(gform0_0))
+					{
+						continue;
+					}
+					stuckGuard?.LoopStep("party-follow");
+					if (await Class356.smethod_0(gform0_0))
 					{
 						continue;
 					}
@@ -572,20 +603,24 @@ internal static class Class58
 					}
 					else
 					{
+						stuckGuard?.LoopStep("pet");
 						if (await GClass7.smethod_0(gform0_0))
 						{
 							continue;
 						}
 						float num2 = await gform0_0.smethod_10(1);
+						stuckGuard?.LoopStep("pick");
 						if (await Class360.smethod_1(gform0_0, num2 + 10f))
 						{
 							continue;
 						}
 						if (!flag2)
 						{
+							stuckGuard?.LoopStep("attack");
 							await Class412.smethod_10(gform0_0, num2);
 							continue;
 						}
+						stuckGuard?.LoopStep("follow");
 						float float_ = await gform0_0.smethod_11(2);
 						if (!(await gform0_0.smethod_6(97)))
 						{

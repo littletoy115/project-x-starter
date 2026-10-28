@@ -3676,6 +3676,10 @@ public sealed class GForm0 : Form
 
 	private DiscordNotifier discordNotifier_0;
 
+	private StuckGuard stuckGuard_0;
+
+	private System.Windows.Forms.Timer stuckGuardTimer;
+
 	private readonly object object_0 = new object();
 
 	private readonly HashSet<Task> hashSet_0 = new HashSet<Task>();
@@ -4482,14 +4486,6 @@ public sealed class GForm0 : Form
 
 	private Label label_72;
 
-	private TabPage tabPage_11;
-
-	private Label label_73;
-
-	private PictureBox pictureBox_0;
-
-	private PictureBox pictureBox_1;
-
 	private CheckBox checkBox_68;
 
 	private TextBox textBox_32;
@@ -4620,53 +4616,7 @@ public sealed class GForm0 : Form
 
 	private DataGridViewTextBoxColumn dataGridViewTextBoxColumn_68;
 
-	private TabPage tabPage_13;
-
-	private DateTimePicker dateTimePicker_4;
-
-	private Label label_97;
-
-	private ComboBox comboBox_19;
-
-	private Label label_98;
-
-	private Label label_99;
-
-	private TextBox textBox_42;
-
-	private RadioButton radioButton_25;
-
-	private RadioButton radioButton_26;
-
-	private CheckBox checkBox_75;
-
 	private CheckBox checkBox_76;
-
-	private PictureBox pictureBox_2;
-
-	private CheckBox checkBox_77;
-
-	private Label label_100;
-
-	private TextBox textBox_43;
-
-	private RadioButton radioButton_27;
-
-	private RadioButton radioButton_28;
-
-	private DateTimePicker dateTimePicker_5;
-
-	private Label label_101;
-
-	private Label label_102;
-
-	private Label label_103;
-
-	private ComboBox comboBox_20;
-
-	private GroupBox groupBox_3;
-
-	private GroupBox groupBox_4;
 
 	private ComboBox comboBox_21;
 
@@ -4696,58 +4646,6 @@ public sealed class GForm0 : Form
 
 	private Label label_108;
 
-	private TabPage tabPage_14;
-
-	private Button button_64;
-
-	private Label label_109;
-
-	private Button button_65;
-
-	private Label label_110;
-
-	private CheckBox checkBox_80;
-
-	private Button button_66;
-
-	private Label label_111;
-
-	private Label label_112;
-
-	private Label label_113;
-
-	private TextBox textBox_45;
-
-	private ComboBox comboBox_22;
-
-	private Label label_114;
-
-	private TextBox textBox_46;
-
-	private Button button_67;
-
-	private RichTextBox richTextBox_0;
-
-	private RichTextBox richTextBox_1;
-
-	private Button button_68;
-
-	private Label label_115;
-
-	private GroupBox groupBox_5;
-
-	private RadioButton radioButton_29;
-
-	private RadioButton radioButton_30;
-
-	private TextBox textBox_47;
-
-	private TextBox textBox_48;
-
-	private RadioButton radioButton_31;
-
-	private Button button_69;
-
 	private CheckBox checkBox_81;
 
 	private CheckBox checkBox_82;
@@ -4769,50 +4667,6 @@ public sealed class GForm0 : Form
 	private Button button_72;
 
 	private TextBox textBox_50;
-
-	private TabPage tabPage_15;
-
-	private CheckBox checkBox_83;
-
-	private Label label_119;
-
-	private Label label_120;
-
-	private Label label_121;
-
-	private ComboBox comboBox_23;
-
-	private DataGridView dataGridView_29;
-
-	private Label label_122;
-
-	private TextBox textBox_51;
-
-	private TextBox textBox_52;
-
-	private TextBox textBox_53;
-
-	private Label label_123;
-
-	private Label label_124;
-
-	private Label label_125;
-
-	private Label label_126;
-
-	private Button button_73;
-
-	private Button button_74;
-
-	private Button button_75;
-
-	private TextBox textBox_54;
-
-	private Label label_127;
-
-	private Label label_128;
-
-	private Button button_76;
 
 	private CheckBox checkBox_84;
 
@@ -4848,20 +4702,6 @@ public sealed class GForm0 : Form
 
 	private Button button_78;
 
-	private TabPage tabPage_16;
-
-	private TrackBar trackBar_2;
-
-	private Label label_134;
-
-	private CheckBox checkBox_89;
-
-	private CheckBox checkBox_90;
-
-	private CheckBox checkBox_91;
-
-	private CheckBox checkBox_92;
-
 	private RadioButton radioButton_32;
 
 	private Label label_135;
@@ -4878,33 +4718,9 @@ public sealed class GForm0 : Form
 
 	private CheckBox checkBox_96;
 
-	private TabPage tabPage_17;
-
-	private DataGridView dataGridView_30;
-
-	private Button button_79;
-
-	private Button button_80;
-
-	private Button button_81;
-
-	private TextBox textBox_58;
-
-	private TextBox textBox_59;
-
-	private TextBox textBox_60;
-
 	private Label label_137;
 
 	private CheckBox checkBox_97;
-
-	private Label label_138;
-
-	private Label label_139;
-
-	private Label label_140;
-
-	private Label label_141;
 
 	private ComboBox comboBox_26;
 
@@ -5551,6 +5367,16 @@ public sealed class GForm0 : Form
 		textBox_2.Leave += textBox_0_Leave;
 		textBox_1.Leave += textBox_0_Leave;
 		textBox_0.Leave += textBox_0_Leave;
+		// rebuff decisions (Class342) -> auto.log, tagged with the hero because every bot shares that file
+		Class342.Trace = delegate(string line)
+		{
+			method_2("[Buff] " + (method_138() ?? "?") + " " + line);
+		};
+		Class412.Trace = delegate(string line)
+		{
+			method_2("[Attack] " + (method_138() ?? "?") + " " + line);
+		};
+		SetupStuckGuard();
 		class11_0.method_7(this);
 		SetupDiscordNotify();
 		checkBox_35.CheckedChanged += checkBox_35_CheckedChanged;
@@ -5581,7 +5407,7 @@ public sealed class GForm0 : Form
 	private void tabControl_0_SelectedIndexChanged(object sender, EventArgs e)
 	{
 		TabPage selectedTab = tabControl_0.SelectedTab;
-		if (selectedTab != tabPage_12 && selectedTab != tabPage_8 && selectedTab != tabPage_1 && selectedTab != tabPage_6 && selectedTab != tabPage_10 && selectedTab != tabPage_15)
+		if (selectedTab != tabPage_12 && selectedTab != tabPage_8 && selectedTab != tabPage_1 && selectedTab != tabPage_6 && selectedTab != tabPage_10)
 		{
 			base.Size = size_0;
 		}
@@ -5756,14 +5582,6 @@ public sealed class GForm0 : Form
 	}
 
 	private void dataGridView_22_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
-	{
-	}
-
-	private void dataGridView_29_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
-	{
-	}
-
-	private void dataGridView_29_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
 	{
 	}
 
@@ -6184,30 +6002,6 @@ public sealed class GForm0 : Form
 	{
 	}
 
-	private void button_64_Click(object sender, EventArgs e)
-	{
-	}
-
-	private void button_65_Click(object sender, EventArgs e)
-	{
-	}
-
-	private void button_66_Click(object sender, EventArgs e)
-	{
-	}
-
-	private void button_67_Click(object sender, EventArgs e)
-	{
-	}
-
-	private void button_68_Click(object sender, EventArgs e)
-	{
-	}
-
-	private void button_69_Click(object sender, EventArgs e)
-	{
-	}
-
 	private void button_70_Click(object sender, EventArgs e)
 	{
 		if (class67_0 != null)
@@ -6221,22 +6015,6 @@ public sealed class GForm0 : Form
 	}
 
 	private void button_72_Click(object sender, EventArgs e)
-	{
-	}
-
-	private void button_75_Click(object sender, EventArgs e)
-	{
-	}
-
-	private void button_74_Click(object sender, EventArgs e)
-	{
-	}
-
-	private void button_73_Click(object sender, EventArgs e)
-	{
-	}
-
-	private void button_76_Click(object sender, EventArgs e)
 	{
 	}
 
@@ -6271,18 +6049,6 @@ public sealed class GForm0 : Form
 	{
 		form7_0.FormClosed -= form7_0_FormClosed;
 		form7_0 = null;
-	}
-
-	private void button_79_Click(object sender, EventArgs e)
-	{
-	}
-
-	private void button_80_Click(object sender, EventArgs e)
-	{
-	}
-
-	private void button_81_Click(object sender, EventArgs e)
-	{
 	}
 
 	private void checkBox_32_CheckedChanged(object sender, EventArgs e)
@@ -6385,18 +6151,6 @@ public sealed class GForm0 : Form
 	{
 	}
 
-	private void checkBox_90_CheckedChanged(object sender, EventArgs e)
-	{
-	}
-
-	private void checkBox_89_CheckedChanged(object sender, EventArgs e)
-	{
-	}
-
-	private void comboBox_22_SelectedIndexChanged(object sender, EventArgs e)
-	{
-	}
-
 	private void trackBar_0_Scroll(object sender, EventArgs e)
 	{
 		this.smethod_25(10, trackBar_0.Value.ToString());
@@ -6411,10 +6165,6 @@ public sealed class GForm0 : Form
 	private void method_26()
 	{
 		label_70.Text = trackBar_1.Value + " %";
-	}
-
-	private void trackBar_2_Scroll(object sender, EventArgs e)
-	{
 	}
 
 	private void textBox_5_TextChanged(object sender, EventArgs e)
@@ -7056,100 +6806,6 @@ public sealed class GForm0 : Form
 		radioButton_23 = new RadioButton();
 		radioButton_24 = new RadioButton();
 		button_51 = new Button();
-		tabPage_11 = new TabPage();
-		pictureBox_2 = new PictureBox();
-		pictureBox_0 = new PictureBox();
-		pictureBox_1 = new PictureBox();
-		label_73 = new Label();
-		tabPage_13 = new TabPage();
-		label_102 = new Label();
-		checkBox_77 = new CheckBox();
-		checkBox_75 = new CheckBox();
-		label_100 = new Label();
-		label_99 = new Label();
-		textBox_43 = new TextBox();
-		textBox_42 = new TextBox();
-		label_103 = new Label();
-		label_98 = new Label();
-		comboBox_20 = new ComboBox();
-		comboBox_19 = new ComboBox();
-		dateTimePicker_5 = new DateTimePicker();
-		label_101 = new Label();
-		label_97 = new Label();
-		dateTimePicker_4 = new DateTimePicker();
-		groupBox_3 = new GroupBox();
-		radioButton_28 = new RadioButton();
-		radioButton_27 = new RadioButton();
-		groupBox_4 = new GroupBox();
-		radioButton_26 = new RadioButton();
-		radioButton_25 = new RadioButton();
-		tabPage_14 = new TabPage();
-		button_69 = new Button();
-		textBox_48 = new TextBox();
-		groupBox_5 = new GroupBox();
-		textBox_47 = new TextBox();
-		radioButton_30 = new RadioButton();
-		radioButton_31 = new RadioButton();
-		radioButton_29 = new RadioButton();
-		button_68 = new Button();
-		richTextBox_1 = new RichTextBox();
-		richTextBox_0 = new RichTextBox();
-		label_114 = new Label();
-		textBox_46 = new TextBox();
-		button_67 = new Button();
-		comboBox_22 = new ComboBox();
-		textBox_45 = new TextBox();
-		label_115 = new Label();
-		label_113 = new Label();
-		label_112 = new Label();
-		label_111 = new Label();
-		checkBox_80 = new CheckBox();
-		button_66 = new Button();
-		button_65 = new Button();
-		button_64 = new Button();
-		label_110 = new Label();
-		label_109 = new Label();
-		tabPage_15 = new TabPage();
-		checkBox_92 = new CheckBox();
-		button_76 = new Button();
-		button_73 = new Button();
-		button_74 = new Button();
-		button_75 = new Button();
-		label_126 = new Label();
-		textBox_51 = new TextBox();
-		textBox_52 = new TextBox();
-		textBox_54 = new TextBox();
-		textBox_53 = new TextBox();
-		dataGridView_29 = new DataGridView();
-		label_122 = new Label();
-		label_123 = new Label();
-		label_124 = new Label();
-		label_119 = new Label();
-		label_127 = new Label();
-		label_120 = new Label();
-		label_125 = new Label();
-		label_128 = new Label();
-		label_121 = new Label();
-		comboBox_23 = new ComboBox();
-		checkBox_83 = new CheckBox();
-		tabPage_16 = new TabPage();
-		trackBar_2 = new TrackBar();
-		label_134 = new Label();
-		checkBox_89 = new CheckBox();
-		checkBox_90 = new CheckBox();
-		checkBox_91 = new CheckBox();
-		tabPage_17 = new TabPage();
-		dataGridView_30 = new DataGridView();
-		button_79 = new Button();
-		button_80 = new Button();
-		button_81 = new Button();
-		textBox_58 = new TextBox();
-		textBox_59 = new TextBox();
-		textBox_60 = new TextBox();
-		label_138 = new Label();
-		label_139 = new Label();
-		label_140 = new Label();
-		label_141 = new Label();
 		comboBox_0 = new ComboBox();
 		textBox_6 = new TextBox();
 		button_11 = new Button();
@@ -7228,21 +6884,6 @@ public sealed class GForm0 : Form
 		((ISupportInitialize)dataGridView_21).BeginInit();
 		tabPage_9.SuspendLayout();
 		groupBox_2.SuspendLayout();
-		tabPage_11.SuspendLayout();
-		((ISupportInitialize)pictureBox_2).BeginInit();
-		((ISupportInitialize)pictureBox_0).BeginInit();
-		((ISupportInitialize)pictureBox_1).BeginInit();
-		tabPage_13.SuspendLayout();
-		groupBox_3.SuspendLayout();
-		groupBox_4.SuspendLayout();
-		tabPage_14.SuspendLayout();
-		groupBox_5.SuspendLayout();
-		tabPage_15.SuspendLayout();
-		((ISupportInitialize)dataGridView_29).BeginInit();
-		tabPage_16.SuspendLayout();
-		((ISupportInitialize)trackBar_2).BeginInit();
-		tabPage_17.SuspendLayout();
-		((ISupportInitialize)dataGridView_30).BeginInit();
 		SuspendLayout();
 		checkBox_1.AutoSize = true;
 		checkBox_1.Checked = true;
@@ -8742,12 +8383,6 @@ public sealed class GForm0 : Form
 		tabControl_0.Controls.Add(tabPage_12);
 		tabControl_0.Controls.Add(tabPage_8);
 		tabControl_0.Controls.Add(tabPage_9);
-		tabControl_0.Controls.Add(tabPage_11);
-		tabControl_0.Controls.Add(tabPage_13);
-		tabControl_0.Controls.Add(tabPage_14);
-		tabControl_0.Controls.Add(tabPage_15);
-		tabControl_0.Controls.Add(tabPage_16);
-		tabControl_0.Controls.Add(tabPage_17);
 		tabControl_0.Location = new Point(3, 8);
 		tabControl_0.Multiline = true;
 		tabControl_0.Name = "tabControl1";
@@ -11825,732 +11460,6 @@ public sealed class GForm0 : Form
 		button_51.Text = "กดทดสอบส\u0e48งแจ\u0e49งเต\u0e37อน";
 		button_51.UseVisualStyleBackColor = true;
 		button_51.Click += button_51_Click;
-		tabPage_11.BorderStyle = BorderStyle.FixedSingle;
-		tabPage_11.Controls.Add(pictureBox_2);
-		tabPage_11.Controls.Add(pictureBox_0);
-		tabPage_11.Controls.Add(pictureBox_1);
-		tabPage_11.Controls.Add(label_73);
-		tabPage_11.Location = new Point(4, 49);
-		tabPage_11.Name = "tabPage11";
-		tabPage_11.Size = new Size(638, 370);
-		tabPage_11.TabIndex = 12;
-		tabPage_11.Text = "AboutMe";
-		tabPage_11.UseVisualStyleBackColor = true;
-		pictureBox_2.BorderStyle = BorderStyle.FixedSingle;
-		pictureBox_2.Location = new Point(112, 59);
-		pictureBox_2.Name = "pictureBox5";
-		pictureBox_2.Size = new Size(198, 231);
-		pictureBox_2.TabIndex = 2;
-		pictureBox_2.TabStop = false;
-		pictureBox_0.BorderStyle = BorderStyle.FixedSingle;
-		pictureBox_0.Location = new Point(6, 182);
-		pictureBox_0.Name = "pictureBox2";
-		pictureBox_0.Size = new Size(100, 100);
-		pictureBox_0.SizeMode = PictureBoxSizeMode.StretchImage;
-		pictureBox_0.TabIndex = 1;
-		pictureBox_0.TabStop = false;
-		pictureBox_1.BorderStyle = BorderStyle.FixedSingle;
-		pictureBox_1.Location = new Point(6, 69);
-		pictureBox_1.Name = "pictureBox1";
-		pictureBox_1.Size = new Size(100, 100);
-		pictureBox_1.SizeMode = PictureBoxSizeMode.Zoom;
-		pictureBox_1.TabIndex = 1;
-		pictureBox_1.TabStop = false;
-		label_73.AutoSize = true;
-		label_73.BackColor = Color.FromArgb(128, 255, 128);
-		label_73.Font = new Font("Microsoft Sans Serif", 12f, FontStyle.Regular, GraphicsUnit.Point, 222);
-		label_73.ForeColor = Color.Black;
-		label_73.Location = new Point(96, 17);
-		label_73.Name = "label66";
-		label_73.Size = new Size(115, 20);
-		label_73.TabIndex = 0;
-		label_73.Text = "ช\u0e48องทางการต\u0e34ดต\u0e48อ";
-		tabPage_13.BorderStyle = BorderStyle.FixedSingle;
-		tabPage_13.Controls.Add(label_102);
-		tabPage_13.Controls.Add(checkBox_77);
-		tabPage_13.Controls.Add(checkBox_75);
-		tabPage_13.Controls.Add(label_100);
-		tabPage_13.Controls.Add(label_99);
-		tabPage_13.Controls.Add(textBox_43);
-		tabPage_13.Controls.Add(textBox_42);
-		tabPage_13.Controls.Add(label_103);
-		tabPage_13.Controls.Add(label_98);
-		tabPage_13.Controls.Add(comboBox_20);
-		tabPage_13.Controls.Add(comboBox_19);
-		tabPage_13.Controls.Add(dateTimePicker_5);
-		tabPage_13.Controls.Add(label_101);
-		tabPage_13.Controls.Add(label_97);
-		tabPage_13.Controls.Add(dateTimePicker_4);
-		tabPage_13.Controls.Add(groupBox_3);
-		tabPage_13.Controls.Add(groupBox_4);
-		tabPage_13.Location = new Point(4, 49);
-		tabPage_13.Name = "tabPage13";
-		tabPage_13.Size = new Size(638, 370);
-		tabPage_13.TabIndex = 14;
-		tabPage_13.Text = "หย\u0e38ด - เร\u0e34\u0e48ม";
-		tabPage_13.UseVisualStyleBackColor = true;
-		label_102.AutoSize = true;
-		label_102.Font = new Font("Microsoft Sans Serif", 9.75f, FontStyle.Bold, GraphicsUnit.Point, 222);
-		label_102.Location = new Point(-39, 160);
-		label_102.Name = "label94";
-		label_102.Size = new Size(667, 16);
-		label_102.TabIndex = 56;
-		label_102.Text = "**************************************************************************************************************";
-		checkBox_77.AutoSize = true;
-		checkBox_77.Location = new Point(7, 184);
-		checkBox_77.Name = "checkBox81";
-		checkBox_77.Size = new Size(139, 17);
-		checkBox_77.TabIndex = 55;
-		checkBox_77.Text = "ใช\u0e49งานต\u0e31\u0e49งเวลาเร\u0e34\u0e48มทำงาน";
-		checkBox_77.UseVisualStyleBackColor = true;
-		checkBox_75.AutoSize = true;
-		checkBox_75.Location = new Point(7, 7);
-		checkBox_75.Name = "checkBox79";
-		checkBox_75.Size = new Size(142, 17);
-		checkBox_75.TabIndex = 55;
-		checkBox_75.Text = "ใช\u0e49งานต\u0e31\u0e49งเวลาหย\u0e38ดทำงาน";
-		checkBox_75.UseVisualStyleBackColor = true;
-		label_100.AutoSize = true;
-		label_100.Location = new Point(162, 234);
-		label_100.Name = "label92";
-		label_100.Size = new Size(37, 13);
-		label_100.TabIndex = 54;
-		label_100.Text = "ช\u0e31\u0e48วโมง";
-		label_99.AutoSize = true;
-		label_99.Location = new Point(162, 57);
-		label_99.Name = "label91";
-		label_99.Size = new Size(37, 13);
-		label_99.TabIndex = 54;
-		label_99.Text = "ช\u0e31\u0e48วโมง";
-		textBox_43.Location = new Point(115, 230);
-		textBox_43.Name = "textBox49";
-		textBox_43.Size = new Size(41, 20);
-		textBox_43.TabIndex = 53;
-		textBox_43.Text = "10";
-		textBox_43.TextAlign = HorizontalAlignment.Center;
-		textBox_42.Location = new Point(115, 53);
-		textBox_42.Name = "textBox48";
-		textBox_42.Size = new Size(41, 20);
-		textBox_42.TabIndex = 53;
-		textBox_42.Text = "10";
-		textBox_42.TextAlign = HorizontalAlignment.Center;
-		label_103.AutoSize = true;
-		label_103.Location = new Point(5, 259);
-		label_103.Name = "label95";
-		label_103.Size = new Size(99, 13);
-		label_103.TabIndex = 50;
-		label_103.Text = "โหมดเร\u0e34\u0e48มการทำงาน";
-		label_98.AutoSize = true;
-		label_98.Location = new Point(5, 85);
-		label_98.Name = "label90";
-		label_98.Size = new Size(102, 13);
-		label_98.TabIndex = 50;
-		label_98.Text = "โหมดหย\u0e38ดการทำงาน";
-		comboBox_20.DropDownStyle = ComboBoxStyle.DropDownList;
-		comboBox_20.FormattingEnabled = true;
-		comboBox_20.Items.AddRange(new object[2] { "เร\u0e34\u0e48มการทำงานท\u0e31นท\u0e35", "เด\u0e49งฟ\u0e49า เร\u0e34\u0e48มการทำงาน" });
-		comboBox_20.Location = new Point(111, 256);
-		comboBox_20.Name = "comboBox14";
-		comboBox_20.Size = new Size(121, 21);
-		comboBox_20.TabIndex = 49;
-		comboBox_19.DropDownStyle = ComboBoxStyle.DropDownList;
-		comboBox_19.FormattingEnabled = true;
-		comboBox_19.Items.AddRange(new object[2] { "หย\u0e38ดการทำงานท\u0e31นท\u0e35", "เด\u0e49งส\u0e49ม หย\u0e38ดการทำงาน" });
-		comboBox_19.Location = new Point(113, 82);
-		comboBox_19.Name = "comboBox13";
-		comboBox_19.Size = new Size(121, 21);
-		comboBox_19.TabIndex = 49;
-		dateTimePicker_5.Format = DateTimePickerFormat.Time;
-		dateTimePicker_5.Location = new Point(184, 207);
-		dateTimePicker_5.Name = "dateTimePicker9";
-		dateTimePicker_5.ShowUpDown = true;
-		dateTimePicker_5.Size = new Size(74, 20);
-		dateTimePicker_5.TabIndex = 46;
-		label_101.BackColor = Color.FromArgb(128, 255, 128);
-		label_101.Font = new Font("Microsoft Sans Serif", 12f, FontStyle.Regular, GraphicsUnit.Point, 222);
-		label_101.Location = new Point(3, 289);
-		label_101.Name = "label93";
-		label_101.Size = new Size(309, 23);
-		label_101.TabIndex = 48;
-		label_101.Text = "อ\u0e35ก .. ช\u0e31\u0e48วโมง .. นาท\u0e35 .. ว\u0e34นาท\u0e35 จะเร\u0e34\u0e48มการทำงาน";
-		label_101.TextAlign = ContentAlignment.MiddleCenter;
-		label_97.BackColor = Color.FromArgb(255, 128, 128);
-		label_97.Font = new Font("Microsoft Sans Serif", 12f, FontStyle.Regular, GraphicsUnit.Point, 222);
-		label_97.Location = new Point(4, 121);
-		label_97.Name = "label89";
-		label_97.Size = new Size(309, 23);
-		label_97.TabIndex = 48;
-		label_97.Text = "อ\u0e35ก .. ช\u0e31\u0e48วโมง .. นาท\u0e35 .. ว\u0e34นาท\u0e35 จะหย\u0e38ดการทำงาน";
-		label_97.TextAlign = ContentAlignment.MiddleCenter;
-		dateTimePicker_4.Format = DateTimePickerFormat.Time;
-		dateTimePicker_4.Location = new Point(184, 30);
-		dateTimePicker_4.Name = "dateTimePicker10";
-		dateTimePicker_4.ShowUpDown = true;
-		dateTimePicker_4.Size = new Size(74, 20);
-		dateTimePicker_4.TabIndex = 46;
-		groupBox_3.Controls.Add(radioButton_28);
-		groupBox_3.Controls.Add(radioButton_27);
-		groupBox_3.Location = new Point(2, 194);
-		groupBox_3.Name = "groupBox7";
-		groupBox_3.Size = new Size(276, 56);
-		groupBox_3.TabIndex = 57;
-		groupBox_3.TabStop = false;
-		radioButton_28.AutoSize = true;
-		radioButton_28.Location = new Point(6, 13);
-		radioButton_28.Name = "radioButton16";
-		radioButton_28.Size = new Size(168, 17);
-		radioButton_28.TabIndex = 51;
-		radioButton_28.TabStop = true;
-		radioButton_28.Text = "ต\u0e31\u0e49งเวลาเร\u0e34\u0e48มการทำงาน เม\u0e37\u0e48อเวลา";
-		radioButton_28.UseVisualStyleBackColor = true;
-		radioButton_27.AutoSize = true;
-		radioButton_27.Location = new Point(6, 36);
-		radioButton_27.Name = "radioButton17";
-		radioButton_27.Size = new Size(103, 17);
-		radioButton_27.TabIndex = 52;
-		radioButton_27.TabStop = true;
-		radioButton_27.Text = "เร\u0e34\u0e48มทำงานในอ\u0e35ก ";
-		radioButton_27.UseVisualStyleBackColor = true;
-		groupBox_4.Controls.Add(radioButton_26);
-		groupBox_4.Controls.Add(radioButton_25);
-		groupBox_4.Location = new Point(3, 20);
-		groupBox_4.Name = "groupBox6";
-		groupBox_4.Size = new Size(276, 56);
-		groupBox_4.TabIndex = 57;
-		groupBox_4.TabStop = false;
-		radioButton_26.AutoSize = true;
-		radioButton_26.Location = new Point(4, 10);
-		radioButton_26.Name = "radioButton14";
-		radioButton_26.Size = new Size(171, 17);
-		radioButton_26.TabIndex = 51;
-		radioButton_26.TabStop = true;
-		radioButton_26.Text = "ต\u0e31\u0e49งเวลาหย\u0e38ดการทำงาน เม\u0e37\u0e48อเวลา";
-		radioButton_26.UseVisualStyleBackColor = true;
-		radioButton_25.AutoSize = true;
-		radioButton_25.Location = new Point(4, 33);
-		radioButton_25.Name = "radioButton15";
-		radioButton_25.Size = new Size(106, 17);
-		radioButton_25.TabIndex = 52;
-		radioButton_25.TabStop = true;
-		radioButton_25.Text = "หย\u0e38ดทำงานในอ\u0e35ก ";
-		radioButton_25.UseVisualStyleBackColor = true;
-		tabPage_14.BorderStyle = BorderStyle.FixedSingle;
-		tabPage_14.Controls.Add(button_69);
-		tabPage_14.Controls.Add(textBox_48);
-		tabPage_14.Controls.Add(groupBox_5);
-		tabPage_14.Controls.Add(button_68);
-		tabPage_14.Controls.Add(richTextBox_1);
-		tabPage_14.Controls.Add(richTextBox_0);
-		tabPage_14.Controls.Add(label_114);
-		tabPage_14.Controls.Add(textBox_46);
-		tabPage_14.Controls.Add(button_67);
-		tabPage_14.Controls.Add(comboBox_22);
-		tabPage_14.Controls.Add(textBox_45);
-		tabPage_14.Controls.Add(label_115);
-		tabPage_14.Controls.Add(label_113);
-		tabPage_14.Controls.Add(label_112);
-		tabPage_14.Controls.Add(label_111);
-		tabPage_14.Controls.Add(checkBox_80);
-		tabPage_14.Controls.Add(button_66);
-		tabPage_14.Controls.Add(button_65);
-		tabPage_14.Controls.Add(button_64);
-		tabPage_14.Controls.Add(label_110);
-		tabPage_14.Controls.Add(label_109);
-		tabPage_14.Location = new Point(4, 49);
-		tabPage_14.Name = "tabPage14";
-		tabPage_14.Size = new Size(638, 370);
-		tabPage_14.TabIndex = 15;
-		tabPage_14.Text = "Chat-Bot";
-		tabPage_14.UseVisualStyleBackColor = true;
-		button_69.Location = new Point(202, 225);
-		button_69.Name = "button69";
-		button_69.Size = new Size(75, 23);
-		button_69.TabIndex = 17;
-		button_69.Text = "ลบ";
-		button_69.UseVisualStyleBackColor = true;
-		button_69.Click += button_69_Click;
-		textBox_48.BackColor = Color.FromArgb(255, 255, 192);
-		textBox_48.ForeColor = SystemColors.InactiveCaptionText;
-		textBox_48.Location = new Point(113, 250);
-		textBox_48.Name = "textBox50";
-		textBox_48.Size = new Size(55, 20);
-		textBox_48.TabIndex = 16;
-		textBox_48.Text = "500";
-		textBox_48.TextAlign = HorizontalAlignment.Center;
-		groupBox_5.Controls.Add(textBox_47);
-		groupBox_5.Controls.Add(radioButton_30);
-		groupBox_5.Controls.Add(radioButton_31);
-		groupBox_5.Controls.Add(radioButton_29);
-		groupBox_5.Location = new Point(161, 270);
-		groupBox_5.Name = "groupBox3";
-		groupBox_5.Size = new Size(152, 68);
-		groupBox_5.TabIndex = 15;
-		groupBox_5.TabStop = false;
-		textBox_47.Location = new Point(3, 47);
-		textBox_47.Name = "textBox35";
-		textBox_47.Size = new Size(128, 20);
-		textBox_47.TabIndex = 1;
-		textBox_47.Text = "แปปนะคร\u0e31บ";
-		radioButton_30.AutoSize = true;
-		radioButton_30.Checked = true;
-		radioButton_30.Location = new Point(7, 29);
-		radioButton_30.Name = "radioButton24";
-		radioButton_30.Size = new Size(45, 17);
-		radioButton_30.TabIndex = 0;
-		radioButton_30.TabStop = true;
-		radioButton_30.Text = "ตอบ";
-		radioButton_30.UseVisualStyleBackColor = true;
-		radioButton_31.AutoSize = true;
-		radioButton_31.Location = new Point(71, 10);
-		radioButton_31.Name = "radioButton25";
-		radioButton_31.Size = new Size(77, 17);
-		radioButton_31.TabIndex = 0;
-		radioButton_31.Text = "ใช\u0e49 AI (VIP)";
-		radioButton_31.UseVisualStyleBackColor = true;
-		radioButton_31.Visible = false;
-		radioButton_29.AutoSize = true;
-		radioButton_29.Location = new Point(7, 10);
-		radioButton_29.Name = "radioButton23";
-		radioButton_29.Size = new Size(58, 17);
-		radioButton_29.TabIndex = 0;
-		radioButton_29.Text = "ไม\u0e48ตอบ";
-		radioButton_29.UseVisualStyleBackColor = true;
-		button_68.Location = new Point(121, 224);
-		button_68.Name = "button68";
-		button_68.Size = new Size(75, 23);
-		button_68.TabIndex = 14;
-		button_68.Text = "ล\u0e49าง";
-		button_68.UseVisualStyleBackColor = true;
-		button_68.Click += button_68_Click;
-		richTextBox_1.Location = new Point(161, 113);
-		richTextBox_1.Name = "richTextBox2";
-		richTextBox_1.ScrollBars = RichTextBoxScrollBars.None;
-		richTextBox_1.Size = new Size(144, 107);
-		richTextBox_1.TabIndex = 13;
-		richTextBox_1.Text = string.Empty;
-		richTextBox_0.Location = new Point(8, 113);
-		richTextBox_0.Name = "richTextBox1";
-		richTextBox_0.ScrollBars = RichTextBoxScrollBars.None;
-		richTextBox_0.Size = new Size(144, 107);
-		richTextBox_0.TabIndex = 13;
-		richTextBox_0.Text = string.Empty;
-		label_114.AutoSize = true;
-		label_114.BackColor = Color.FromArgb(192, 192, 255);
-		label_114.Location = new Point(122, 55);
-		label_114.Name = "label101";
-		label_114.Size = new Size(66, 13);
-		label_114.TabIndex = 12;
-		label_114.Text = "ห\u0e31วข\u0e49อสนทนา";
-		textBox_46.Location = new Point(95, 72);
-		textBox_46.Name = "textBox52";
-		textBox_46.Size = new Size(122, 20);
-		textBox_46.TabIndex = 11;
-		button_67.Location = new Point(189, 27);
-		button_67.Name = "button67";
-		button_67.Size = new Size(75, 23);
-		button_67.TabIndex = 10;
-		button_67.Text = "Reload";
-		button_67.UseVisualStyleBackColor = true;
-		button_67.Click += button_67_Click;
-		comboBox_22.DropDownStyle = ComboBoxStyle.DropDownList;
-		comboBox_22.FormattingEnabled = true;
-		comboBox_22.Location = new Point(55, 28);
-		comboBox_22.Name = "comboBox11";
-		comboBox_22.Size = new Size(121, 21);
-		comboBox_22.TabIndex = 9;
-		comboBox_22.SelectedIndexChanged += comboBox_22_SelectedIndexChanged;
-		textBox_45.Location = new Point(8, 275);
-		textBox_45.Name = "textBox51";
-		textBox_45.Size = new Size(88, 20);
-		textBox_45.TabIndex = 8;
-		label_115.AutoSize = true;
-		label_115.BackColor = Color.FromArgb(255, 192, 192);
-		label_115.Font = new Font("Microsoft Sans Serif", 9f, FontStyle.Bold, GraphicsUnit.Point, 222);
-		label_115.Location = new Point(176, 252);
-		label_115.Name = "label102";
-		label_115.Size = new Size(122, 15);
-		label_115.TabIndex = 7;
-		label_115.Text = "## หากตอบไม\u0e48ได\u0e49 ##";
-		label_113.AutoSize = true;
-		label_113.BackColor = Color.FromArgb(192, 255, 255);
-		label_113.Font = new Font("Microsoft Sans Serif", 9f, FontStyle.Bold, GraphicsUnit.Point, 222);
-		label_113.Location = new Point(11, 253);
-		label_113.Name = "label99";
-		label_113.Size = new Size(85, 15);
-		label_113.TabIndex = 7;
-		label_113.Text = "## ทดสอบ ##";
-		label_112.AutoSize = true;
-		label_112.BackColor = Color.FromArgb(192, 255, 192);
-		label_112.Location = new Point(210, 97);
-		label_112.Name = "label98";
-		label_112.Size = new Size(53, 13);
-		label_112.TabIndex = 6;
-		label_112.Text = "ช\u0e38ดคำตอบ";
-		label_111.AutoSize = true;
-		label_111.BackColor = Color.FromArgb(255, 255, 192);
-		label_111.Location = new Point(44, 97);
-		label_111.Name = "label97";
-		label_111.Size = new Size(52, 13);
-		label_111.TabIndex = 6;
-		label_111.Text = "ช\u0e38ดคำถาม";
-		checkBox_80.AutoSize = true;
-		checkBox_80.Location = new Point(16, 5);
-		checkBox_80.Name = "checkBox72";
-		checkBox_80.Size = new Size(99, 17);
-		checkBox_80.TabIndex = 5;
-		checkBox_80.Text = "ใช\u0e49งานแชทบอท";
-		checkBox_80.UseVisualStyleBackColor = true;
-		button_66.Location = new Point(40, 224);
-		button_66.Name = "button50";
-		button_66.Size = new Size(75, 23);
-		button_66.TabIndex = 4;
-		button_66.Text = "เพ\u0e34\u0e48ม";
-		button_66.UseVisualStyleBackColor = true;
-		button_66.Click += button_66_Click;
-		button_65.Location = new Point(102, 272);
-		button_65.Name = "button49";
-		button_65.Size = new Size(57, 23);
-		button_65.TabIndex = 3;
-		button_65.Text = "ส\u0e48งคำถาม";
-		button_65.UseVisualStyleBackColor = true;
-		button_65.Click += button_65_Click;
-		button_64.Location = new Point(223, 56);
-		button_64.Name = "button48";
-		button_64.Size = new Size(75, 23);
-		button_64.TabIndex = 2;
-		button_64.Text = "Test Init";
-		button_64.UseVisualStyleBackColor = true;
-		button_64.Visible = false;
-		button_64.Click += button_64_Click;
-		label_110.AutoSize = true;
-		label_110.BackColor = Color.FromArgb(192, 255, 192);
-		label_110.Location = new Point(11, 324);
-		label_110.Name = "label96";
-		label_110.Size = new Size(45, 13);
-		label_110.TabIndex = 1;
-		label_110.Text = "คำตอบ :";
-		label_109.AutoSize = true;
-		label_109.BackColor = Color.FromArgb(255, 255, 192);
-		label_109.Location = new Point(11, 302);
-		label_109.Name = "label58";
-		label_109.Size = new Size(44, 13);
-		label_109.TabIndex = 1;
-		label_109.Text = "คำถาม :";
-		tabPage_15.BorderStyle = BorderStyle.FixedSingle;
-		tabPage_15.Controls.Add(checkBox_92);
-		tabPage_15.Controls.Add(button_76);
-		tabPage_15.Controls.Add(button_73);
-		tabPage_15.Controls.Add(button_74);
-		tabPage_15.Controls.Add(button_75);
-		tabPage_15.Controls.Add(label_126);
-		tabPage_15.Controls.Add(textBox_51);
-		tabPage_15.Controls.Add(textBox_52);
-		tabPage_15.Controls.Add(textBox_54);
-		tabPage_15.Controls.Add(textBox_53);
-		tabPage_15.Controls.Add(dataGridView_29);
-		tabPage_15.Controls.Add(label_122);
-		tabPage_15.Controls.Add(label_123);
-		tabPage_15.Controls.Add(label_124);
-		tabPage_15.Controls.Add(label_119);
-		tabPage_15.Controls.Add(label_127);
-		tabPage_15.Controls.Add(label_120);
-		tabPage_15.Controls.Add(label_125);
-		tabPage_15.Controls.Add(label_128);
-		tabPage_15.Controls.Add(label_121);
-		tabPage_15.Controls.Add(comboBox_23);
-		tabPage_15.Controls.Add(checkBox_83);
-		tabPage_15.Location = new Point(4, 49);
-		tabPage_15.Name = "tabPage15";
-		tabPage_15.Size = new Size(638, 370);
-		tabPage_15.TabIndex = 16;
-		tabPage_15.Text = "ProxyIP";
-		tabPage_15.UseVisualStyleBackColor = true;
-		checkBox_92.AutoSize = true;
-		checkBox_92.Location = new Point(107, 12);
-		checkBox_92.Name = "checkBox86";
-		checkBox_92.Size = new Size(44, 17);
-		checkBox_92.TabIndex = 12;
-		checkBox_92.Text = "Log";
-		checkBox_92.UseVisualStyleBackColor = true;
-		checkBox_92.Visible = false;
-		button_76.Location = new Point(120, 34);
-		button_76.Name = "button76";
-		button_76.Size = new Size(49, 23);
-		button_76.TabIndex = 11;
-		button_76.Text = "Refresh";
-		button_76.UseVisualStyleBackColor = true;
-		button_76.Click += button_76_Click;
-		button_73.Location = new Point(45, 342);
-		button_73.Name = "button75";
-		button_73.Size = new Size(75, 23);
-		button_73.TabIndex = 10;
-		button_73.Text = "ลบ";
-		button_73.UseVisualStyleBackColor = true;
-		button_73.Click += button_73_Click;
-		button_74.Location = new Point(86, 313);
-		button_74.Name = "button74";
-		button_74.Size = new Size(75, 23);
-		button_74.TabIndex = 10;
-		button_74.Text = "ล\u0e49าง";
-		button_74.UseVisualStyleBackColor = true;
-		button_74.Click += button_74_Click;
-		button_75.Location = new Point(5, 313);
-		button_75.Name = "button73";
-		button_75.Size = new Size(75, 23);
-		button_75.TabIndex = 10;
-		button_75.Text = "เพ\u0e34\u0e48ม";
-		button_75.UseVisualStyleBackColor = true;
-		button_75.Click += button_75_Click;
-		label_126.AutoSize = true;
-		label_126.BackColor = Color.FromArgb(255, 128, 255);
-		label_126.Font = new Font("Microsoft Sans Serif", 9.75f, FontStyle.Bold, GraphicsUnit.Point, 222);
-		label_126.Location = new Point(10, 183);
-		label_126.Name = "label113";
-		label_126.Size = new Size(85, 16);
-		label_126.TabIndex = 9;
-		label_126.Text = "จ\u0e31ดการ Proxy";
-		textBox_51.Location = new Point(45, 287);
-		textBox_51.Name = "textBox57";
-		textBox_51.Size = new Size(122, 20);
-		textBox_51.TabIndex = 5;
-		textBox_52.Location = new Point(45, 258);
-		textBox_52.Name = "textBox56";
-		textBox_52.Size = new Size(122, 20);
-		textBox_52.TabIndex = 5;
-		textBox_54.Location = new Point(45, 233);
-		textBox_54.Name = "textBox58";
-		textBox_54.Size = new Size(122, 20);
-		textBox_54.TabIndex = 5;
-		textBox_53.Location = new Point(45, 207);
-		textBox_53.Name = "textBox55";
-		textBox_53.Size = new Size(122, 20);
-		textBox_53.TabIndex = 5;
-		dataGridView_29.AllowUserToAddRows = false;
-		dataGridView_29.AllowUserToDeleteRows = false;
-		dataGridView_29.AllowUserToResizeColumns = false;
-		dataGridView_29.AllowUserToResizeRows = false;
-		dataGridView_29.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-		dataGridView_29.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-		dataGridView_29.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle52;
-		dataGridView_29.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-		dataGridView_29.Location = new Point(175, 3);
-		dataGridView_29.Name = "dataGridView13";
-		dataGridView_29.ReadOnly = true;
-		dataGridView_29.RowHeadersVisible = false;
-		dataGridView_29.Size = new Size(458, 364);
-		dataGridView_29.TabIndex = 4;
-		dataGridView_29.CellDoubleClick += dataGridView_29_CellDoubleClick;
-		dataGridView_29.CellFormatting += dataGridView_29_CellFormatting;
-		label_122.AutoSize = true;
-		label_122.Location = new Point(12, 147);
-		label_122.Name = "label109";
-		label_122.Size = new Size(34, 13);
-		label_122.TabIndex = 3;
-		label_122.Text = "Ping :";
-		label_123.AutoSize = true;
-		label_123.Location = new Point(7, 292);
-		label_123.Name = "label112";
-		label_123.Size = new Size(39, 13);
-		label_123.TabIndex = 2;
-		label_123.Text = "Pass : ";
-		label_124.AutoSize = true;
-		label_124.Location = new Point(7, 262);
-		label_124.Name = "label111";
-		label_124.Size = new Size(38, 13);
-		label_124.TabIndex = 2;
-		label_124.Text = "User : ";
-		label_119.AutoSize = true;
-		label_119.Location = new Point(12, 126);
-		label_119.Name = "label108";
-		label_119.Size = new Size(39, 13);
-		label_119.TabIndex = 2;
-		label_119.Text = "Pass : ";
-		label_127.AutoSize = true;
-		label_127.Location = new Point(7, 236);
-		label_127.Name = "label115";
-		label_127.Size = new Size(32, 13);
-		label_127.TabIndex = 2;
-		label_127.Text = "Prot :";
-		label_120.AutoSize = true;
-		label_120.Location = new Point(12, 105);
-		label_120.Name = "label107";
-		label_120.Size = new Size(38, 13);
-		label_120.TabIndex = 2;
-		label_120.Text = "User : ";
-		label_125.AutoSize = true;
-		label_125.Location = new Point(7, 210);
-		label_125.Name = "label110";
-		label_125.Size = new Size(26, 13);
-		label_125.TabIndex = 2;
-		label_125.Text = "IP : ";
-		label_128.AutoSize = true;
-		label_128.Location = new Point(12, 85);
-		label_128.Name = "label114";
-		label_128.Size = new Size(32, 13);
-		label_128.TabIndex = 2;
-		label_128.Text = "Port :";
-		label_121.AutoSize = true;
-		label_121.Location = new Point(12, 65);
-		label_121.Name = "label105";
-		label_121.Size = new Size(26, 13);
-		label_121.TabIndex = 2;
-		label_121.Text = "IP : ";
-		comboBox_23.DropDownStyle = ComboBoxStyle.DropDownList;
-		comboBox_23.FormattingEnabled = true;
-		comboBox_23.Location = new Point(7, 35);
-		comboBox_23.Name = "comboBox12";
-		comboBox_23.Size = new Size(109, 21);
-		comboBox_23.TabIndex = 1;
-		checkBox_83.AutoSize = true;
-		checkBox_83.Location = new Point(15, 12);
-		checkBox_83.Name = "checkBox83";
-		checkBox_83.Size = new Size(86, 17);
-		checkBox_83.TabIndex = 0;
-		checkBox_83.Text = "ใช\u0e49งาน Proxy";
-		checkBox_83.UseVisualStyleBackColor = true;
-		tabPage_16.Controls.Add(trackBar_2);
-		tabPage_16.Controls.Add(label_134);
-		tabPage_16.Controls.Add(checkBox_89);
-		tabPage_16.Controls.Add(checkBox_90);
-		tabPage_16.Controls.Add(checkBox_91);
-		tabPage_16.Location = new Point(4, 49);
-		tabPage_16.Name = "tabPage16";
-		tabPage_16.Size = new Size(638, 370);
-		tabPage_16.TabIndex = 17;
-		tabPage_16.Text = " CPU";
-		tabPage_16.UseVisualStyleBackColor = true;
-		trackBar_2.Location = new Point(33, 95);
-		trackBar_2.Maximum = 60;
-		trackBar_2.Minimum = 10;
-		trackBar_2.Name = "trackBar3";
-		trackBar_2.Size = new Size(235, 45);
-		trackBar_2.TabIndex = 2;
-		trackBar_2.Value = 10;
-		trackBar_2.Scroll += trackBar_2_Scroll;
-		label_134.AutoSize = true;
-		label_134.BackColor = Color.FromArgb(128, 255, 255);
-		label_134.Location = new Point(207, 67);
-		label_134.Name = "label119";
-		label_134.Size = new Size(27, 13);
-		label_134.TabIndex = 1;
-		label_134.Text = "FPS";
-		checkBox_89.AutoSize = true;
-		checkBox_89.Location = new Point(33, 63);
-		checkBox_89.Name = "checkBox91";
-		checkBox_89.Size = new Size(177, 17);
-		checkBox_89.TabIndex = 0;
-		checkBox_89.Text = "เป\u0e34ดใช\u0e49งาน ลด CPU ( ล\u0e47อค FPS ) ";
-		checkBox_89.UseVisualStyleBackColor = true;
-		checkBox_89.CheckedChanged += checkBox_89_CheckedChanged;
-		checkBox_90.AutoSize = true;
-		checkBox_90.Location = new Point(33, 40);
-		checkBox_90.Name = "checkBox90";
-		checkBox_90.Size = new Size(168, 17);
-		checkBox_90.TabIndex = 0;
-		checkBox_90.Text = "เป\u0e34ดใช\u0e49งาน ลด GPU (หย\u0e38ดภาพ)";
-		checkBox_90.UseVisualStyleBackColor = true;
-		checkBox_90.CheckedChanged += checkBox_90_CheckedChanged;
-		checkBox_91.AutoSize = true;
-		checkBox_91.Enabled = false;
-		checkBox_91.Location = new Point(17, 17);
-		checkBox_91.Name = "checkBox89";
-		checkBox_91.Size = new Size(168, 17);
-		checkBox_91.TabIndex = 0;
-		checkBox_91.Text = "ใช\u0e49งานท\u0e31นท\u0e35เม\u0e37\u0e48อไม\u0e48โฟก\u0e31สหน\u0e49าจอ";
-		checkBox_91.UseVisualStyleBackColor = true;
-		tabPage_17.BorderStyle = BorderStyle.FixedSingle;
-		tabPage_17.Controls.Add(dataGridView_30);
-		tabPage_17.Controls.Add(button_79);
-		tabPage_17.Controls.Add(button_80);
-		tabPage_17.Controls.Add(button_81);
-		tabPage_17.Controls.Add(textBox_58);
-		tabPage_17.Controls.Add(textBox_59);
-		tabPage_17.Controls.Add(textBox_60);
-		tabPage_17.Controls.Add(label_138);
-		tabPage_17.Controls.Add(label_139);
-		tabPage_17.Controls.Add(label_140);
-		tabPage_17.Controls.Add(label_141);
-		tabPage_17.Location = new Point(4, 49);
-		tabPage_17.Name = "tabPage18";
-		tabPage_17.Size = new Size(638, 370);
-		tabPage_17.TabIndex = 19;
-		tabPage_17.Text = "Login";
-		tabPage_17.UseVisualStyleBackColor = true;
-		dataGridView_30.AllowUserToAddRows = false;
-		dataGridView_30.AllowUserToDeleteRows = false;
-		dataGridView_30.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-		dataGridView_30.Location = new Point(3, 164);
-		dataGridView_30.MultiSelect = false;
-		dataGridView_30.Name = "dataGridView15";
-		dataGridView_30.ReadOnly = true;
-		dataGridView_30.RowHeadersVisible = false;
-		dataGridView_30.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-		dataGridView_30.Size = new Size(308, 177);
-		dataGridView_30.TabIndex = 27;
-		button_79.Location = new Point(120, 135);
-		button_79.Name = "button83";
-		button_79.Size = new Size(75, 23);
-		button_79.TabIndex = 26;
-		button_79.Text = "Delete";
-		button_79.UseVisualStyleBackColor = true;
-		button_79.Click += button_79_Click;
-		button_80.Location = new Point(205, 135);
-		button_80.Name = "button84";
-		button_80.Size = new Size(75, 23);
-		button_80.TabIndex = 25;
-		button_80.Text = "Clear";
-		button_80.UseVisualStyleBackColor = true;
-		button_80.Click += button_80_Click;
-		button_81.Location = new Point(36, 135);
-		button_81.Name = "button86";
-		button_81.Size = new Size(75, 23);
-		button_81.TabIndex = 24;
-		button_81.Text = "Add";
-		button_81.UseVisualStyleBackColor = true;
-		button_81.Click += button_81_Click;
-		textBox_58.Location = new Point(101, 43);
-		textBox_58.MaxLength = 20;
-		textBox_58.Name = "textBox68";
-		textBox_58.Size = new Size(122, 20);
-		textBox_58.TabIndex = 21;
-		textBox_59.Location = new Point(101, 73);
-		textBox_59.MaxLength = 20;
-		textBox_59.Name = "textBox69";
-		textBox_59.Size = new Size(122, 20);
-		textBox_59.TabIndex = 22;
-		textBox_59.UseSystemPasswordChar = true;
-		textBox_60.Location = new Point(101, 103);
-		textBox_60.MaxLength = 19;
-		textBox_60.Name = "textBox70";
-		textBox_60.Size = new Size(122, 20);
-		textBox_60.TabIndex = 23;
-		textBox_60.UseSystemPasswordChar = true;
-		label_138.Location = new Point(39, 76);
-		label_138.Name = "label133";
-		label_138.Size = new Size(62, 13);
-		label_138.TabIndex = 20;
-		label_138.Text = "Pass :";
-		label_138.TextAlign = ContentAlignment.MiddleRight;
-		label_139.Location = new Point(39, 46);
-		label_139.Name = "label134";
-		label_139.Size = new Size(62, 13);
-		label_139.TabIndex = 19;
-		label_139.Text = "User :";
-		label_139.TextAlign = ContentAlignment.MiddleRight;
-		label_140.AutoSize = true;
-		label_140.BackColor = Color.FromArgb(255, 128, 255);
-		label_140.Font = new Font("Microsoft Sans Serif", 9.75f, FontStyle.Bold, GraphicsUnit.Point, 222);
-		label_140.Location = new Point(98, 15);
-		label_140.Name = "label139";
-		label_140.Size = new Size(100, 16);
-		label_140.TabIndex = 18;
-		label_140.Text = "Manage User";
-		label_141.Location = new Point(39, 106);
-		label_141.Name = "label140";
-		label_141.Size = new Size(62, 13);
-		label_141.TabIndex = 20;
-		label_141.Text = "SubPass :";
-		label_141.TextAlign = ContentAlignment.MiddleRight;
 		comboBox_0.Anchor = AnchorStyles.Bottom;
 		comboBox_0.DropDownStyle = ComboBoxStyle.DropDownList;
 		comboBox_0.FormattingEnabled = true;
@@ -12773,30 +11682,6 @@ public sealed class GForm0 : Form
 		tabPage_9.PerformLayout();
 		groupBox_2.ResumeLayout(performLayout: false);
 		groupBox_2.PerformLayout();
-		tabPage_11.ResumeLayout(performLayout: false);
-		tabPage_11.PerformLayout();
-		((ISupportInitialize)pictureBox_2).EndInit();
-		((ISupportInitialize)pictureBox_0).EndInit();
-		((ISupportInitialize)pictureBox_1).EndInit();
-		tabPage_13.ResumeLayout(performLayout: false);
-		tabPage_13.PerformLayout();
-		groupBox_3.ResumeLayout(performLayout: false);
-		groupBox_3.PerformLayout();
-		groupBox_4.ResumeLayout(performLayout: false);
-		groupBox_4.PerformLayout();
-		tabPage_14.ResumeLayout(performLayout: false);
-		tabPage_14.PerformLayout();
-		groupBox_5.ResumeLayout(performLayout: false);
-		groupBox_5.PerformLayout();
-		tabPage_15.ResumeLayout(performLayout: false);
-		tabPage_15.PerformLayout();
-		((ISupportInitialize)dataGridView_29).EndInit();
-		tabPage_16.ResumeLayout(performLayout: false);
-		tabPage_16.PerformLayout();
-		((ISupportInitialize)trackBar_2).EndInit();
-		tabPage_17.ResumeLayout(performLayout: false);
-		tabPage_17.PerformLayout();
-		((ISupportInitialize)dataGridView_30).EndInit();
 		ResumeLayout(performLayout: false);
 		PerformLayout();
 	}
@@ -13200,12 +12085,12 @@ public sealed class GForm0 : Form
 
 	private DataGridView method_45(int int_12)
 	{
-		return Class80.smethod_0(base.Controls.Find("dataGridView" + int_12, searchAllChildren: true)) as DataGridView;
+		return Class366.FindCached(this, "dataGridView" + int_12) as DataGridView;
 	}
 
 	private Button method_46(int int_12)
 	{
-		return Class80.smethod_0(base.Controls.Find("button" + int_12, searchAllChildren: true)) as Button;
+		return Class366.FindCached(this, "button" + int_12) as Button;
 	}
 
 	private void method_47()
@@ -15756,6 +14641,107 @@ public sealed class GForm0 : Form
 	private string method_138()
 	{
 		return Volatile.Read(ref string_0);
+	}
+
+	internal StuckGuard GetStuckGuard()
+	{
+		return stuckGuard_0;
+	}
+
+	// "กันตัวละครค้าง" (Monster tab, under the Lock Monster box) — see StuckGuard.cs. Built before Class11 binds
+	// the form so the tick and the minutes are saved per hero like the other settings.
+	private void SetupStuckGuard()
+	{
+		CheckBox enable = new CheckBox
+		{
+			Name = "checkBoxStuckGuard",
+			Location = new Point(324, 222),
+			AutoSize = true,
+			Text = "กันตัวละครค้าง",
+			UseVisualStyleBackColor = true
+		};
+		TextBox minutes = new TextBox
+		{
+			Name = "textBoxStuckGuardMin",
+			Location = new Point(398, 243),
+			Size = new Size(30, 20),
+			Text = "3"
+		};
+		Label status = new Label
+		{
+			Location = new Point(341, 268),
+			Size = new Size(126, 13),
+			AutoEllipsis = true,
+			Text = "-"
+		};
+		tabPage_1.Controls.AddRange(new Control[5]
+		{
+			enable,
+			new Label
+			{
+				Location = new Point(341, 246),
+				AutoSize = true,
+				Text = "ยืนเฉยเกิน"
+			},
+			minutes,
+			new Label
+			{
+				Location = new Point(431, 246),
+				AutoSize = true,
+				Text = "นาที"
+			},
+			status
+		});
+		stuckGuard_0 = new StuckGuard(method_2, method_138, delegate(StuckGuard.Recovery move)
+		{
+			method_7()?.method_177(move.X, move.Y, move.Z, move.AllowFar, move.Source);
+		}, delegate(TimeSpan idle, string why)
+		{
+			discordNotifier_0?.NotifyStuck(method_138(), idle, why);
+		}, delegate(TimeSpan idle)
+		{
+			discordNotifier_0?.NotifyUnstuck(method_138(), idle);
+		}, () => DateTime.UtcNow);
+		stuckGuardTimer = new System.Windows.Forms.Timer
+		{
+			Interval = 10000
+		};
+		stuckGuardTimer.Tick += delegate
+		{
+			if (base.IsDisposed)
+			{
+				return;
+			}
+			Class145 world = method_5();
+			Class83 hero = world.method_0();
+			if (!int.TryParse(minutes.Text.Trim(), NumberStyles.Integer, CultureInfo.InvariantCulture, out int threshold))
+			{
+				threshold = 3;
+			}
+			StuckGuard.Observation observation = new StuckGuard.Observation
+			{
+				// following a leader (ตามหัวตี้ / วิ่งตามเพื่อน) or Heal stands still on purpose
+				Active = enable.Checked && checkBox_39.Checked && method_6() && !task_1.IsCompleted && !radioButton_32.Checked && !radioButton_33.Checked && !radioButton_13.Checked,
+				HasHero = hero != null,
+				TargetId = Class412.CurrentTarget,
+				Threshold = TimeSpan.FromMinutes(Math.Max(1, Math.Min(60, threshold)))
+			};
+			if (hero != null)
+			{
+				observation.SnapshotMs = hero.long_0;
+				observation.X = hero.float_0;
+				observation.Y = hero.float_1;
+				observation.Z = hero.float_2;
+				observation.Hp = hero.ushort_0;
+				observation.ActState = hero.uint_0;
+				observation.Action = hero.byte_0;
+				observation.PathActive = hero.byte_3;
+			}
+			IReadOnlyList<Class403> census = world.method_2();
+			stuckGuard_0.Check(observation, (uint id) => StuckGuard.HpIn(census, id));
+			status.Text = stuckGuard_0.Status();
+		};
+		stuckGuardTimer.Start();
 	}
 
 	private void SetupDiscordNotify()

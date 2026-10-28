@@ -84,6 +84,10 @@ internal static class Class424
 			{
 				return (Class198.smethod_281() != 0) ? 1 : 0;
 			}
+			if (Array.IndexOf(args, "--test-stuck-guard") >= 0)
+			{
+				return (StuckGuard.SelfTest() != 0) ? 1 : 0;
+			}
 			if (Array.IndexOf(args, "--test-root-toast") >= 0)
 			{
 				return (Class198.smethod_293() != 0) ? 1 : 0;

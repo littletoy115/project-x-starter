@@ -674,9 +674,31 @@ internal static class Class366
 		return smethod_31<DataGridView>(gform0_0, string_0, bool_0: true);
 	}
 
+	// Name -> control, per form. The loop and the UI timer read dozens of settings by name every 300 ms and a
+	// Controls.Find walks all ~570 controls (~0.2 ms on the UI thread); the controls never change after load.
+	private static readonly ConditionalWeakTable<GForm0, Dictionary<string, Control>> found = new ConditionalWeakTable<GForm0, Dictionary<string, Control>>();
+
+	internal static Control FindCached(GForm0 gform0_0, string string_0)
+	{
+		Dictionary<string, Control> cache = found.GetOrCreateValue(gform0_0);
+		lock (cache)
+		{
+			if (cache.TryGetValue(string_0, out Control control) && !control.IsDisposed)
+			{
+				return control;
+			}
+			control = Class80.smethod_0(gform0_0.Controls.Find(string_0, searchAllChildren: true));
+			if (control != null)
+			{
+				cache[string_0] = control;
+			}
+			return control;
+		}
+	}
+
 	private static T smethod_31<T>(GForm0 gform0_0, string string_0, bool bool_0) where T : Control
 	{
-		T obj = Class80.smethod_0(gform0_0.Controls.Find(string_0, searchAllChildren: true)) as T;
+		T obj = FindCached(gform0_0, string_0) as T;
 		if (obj == null && bool_0)
 		{
 			smethod_32(string_0);

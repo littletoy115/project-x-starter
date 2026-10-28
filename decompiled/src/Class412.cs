@@ -588,6 +588,12 @@ internal static class Class412
 		return uint_0 != 0;
 	}
 
+	// monster the attack logic is on (0 = none), read by StuckGuard
+	internal static uint CurrentTarget => uint_0;
+
+	// "[Attack] <hero> ..." lines in auto.log, set by GForm0; null in self-tests
+	internal static Action<string> Trace;
+
 	internal static Class398 smethod_1()
 	{
 		return Volatile.Read(ref class398_0);
@@ -725,8 +731,10 @@ internal static class Class412
 			}
 			if (class394_0.method_0(@class.uint_0, @class.byte_0, @class.ushort_0, @class.ushort_1, @class.float_0, @class.float_2, (int)Math.Min(@class.ushort_2, int.MaxValue), class2.float_0, class2.float_2, class2.byte_0, DateTime.UtcNow))
 			{
+				// the attack-stuck guard compares x/z only; log the height too so floor/stair mismatches show up
 				if (uint_0 == @class.uint_0)
 				{
+					Volatile.Read(ref Trace)?.Invoke("blocked target " + @class.uint_0 + " hp=" + @class.ushort_2 + " mob=(" + @class.float_0.ToString("0.0") + "," + @class.float_1.ToString("0.0") + "," + @class.float_2.ToString("0.0") + ") hero=(" + class2.float_0.ToString("0.0") + "," + class2.float_1.ToString("0.0") + "," + class2.float_2.ToString("0.0") + ") dy=" + Math.Abs(@class.float_1 - class2.float_1).ToString("0.0"));
 					uint_0 = 0u;
 					Class119 class3 = gform0_0.method_7();
 					if (class3 != null)
